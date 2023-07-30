@@ -14,7 +14,7 @@
 
 package cli
 
-import(
+import (
 	"fmt"
 	"github.com/begopher/cli/api"
 )
@@ -33,7 +33,6 @@ func (n _namespace) Has(key string) bool {
 	}
 	return false
 }
-
 
 func (n _namespace) Add(name string) error {
 	if name == "" {

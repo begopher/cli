@@ -22,10 +22,8 @@ func HelpStatement() helpStatement {
 	return helpStatement{}
 }
 
-type helpStatement struct {}
+type helpStatement struct{}
 
 func (helpStatement) String(path string) string {
 	return fmt.Sprintf("Run '%s COMMAND --help' for more information on a command.\n", path)
 }
-
-

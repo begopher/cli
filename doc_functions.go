@@ -40,7 +40,6 @@ func Default(name string) string {
 	return name
 }
 
-
 func Implementation(command Command) Command {
 	return command
 }

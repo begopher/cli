@@ -29,17 +29,17 @@ func Group(name string, cmds ...api.Cmd) group {
 		panic("group.New: cmds cannot be empty or nil")
 	}
 	return group{
-		name:    name,
-		cmds:    Cmds(cmds),
+		name: name,
+		cmds: Cmds(cmds),
 	}
 }
 
 type group struct {
-	name    string
-	cmds    api.Cmds
+	name string
+	cmds api.Cmds
 }
 
-func (g group) Exec(path []string, options map[string]string, flags map[string]bool, args []string) (bool, error){
+func (g group) Exec(path []string, options map[string]string, flags map[string]bool, args []string) (bool, error) {
 	ok, err := g.cmds.Exec(path, options, flags, args)
 	if err != nil {
 		return ok, err
@@ -50,7 +50,7 @@ func (g group) Exec(path []string, options map[string]string, flags map[string]b
 	return false, nil
 }
 
-func (g group) Name() string{
+func (g group) Name() string {
 	return g.name
 }
 

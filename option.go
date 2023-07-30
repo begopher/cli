@@ -86,7 +86,7 @@ func (o option) Extract(opts map[string]string, args []string) []string {
 
 func (o option) Default(opts map[string]string) {
 	_, ok := opts[o.lname]
-	if !ok && o.lname != ""{
+	if !ok && o.lname != "" {
 		opts[o.lname] = o.value
 	}
 	//if value := opts[o.lname]; value != "" && !ok {

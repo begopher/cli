@@ -16,8 +16,8 @@ package cli
 
 import (
 	"fmt"
-	"strings"
 	"github.com/begopher/cli/api"
+	"strings"
 )
 
 func Cmd(name string, description string, statement Statement, opts api.Options, flgs api.Flags, args []string, command Command) cmd {
@@ -71,36 +71,36 @@ func Cmd(name string, description string, statement Statement, opts api.Options,
 	if separator < len(args) {
 		variadicArgs = args[separator+1:]
 	}
-	if separator  == len(args) - 1 {
+	if separator == len(args)-1 {
 		panic("cli.Cmd: hint must be given when using variadic arguments")
 	}
 	return cmd{
-		name:        name,
-		description: description,
-		statement:   statement,
-		opts:        opts,
-		flags:       flgs,
-		command:     command,
-		namedArgs:   namedArgs,
+		name:         name,
+		description:  description,
+		statement:    statement,
+		opts:         opts,
+		flags:        flgs,
+		command:      command,
+		namedArgs:    namedArgs,
 		variadicArgs: variadicArgs,
-		namespace:   namespace,
-		optionWidth: opts.LNameWidth(),
-		flagWidth:   flgs.LNameWidth(),
+		namespace:    namespace,
+		optionWidth:  opts.LNameWidth(),
+		flagWidth:    flgs.LNameWidth(),
 	}
 }
 
 type cmd struct {
-	name        string
-	description string
-	statement   Statement
-	opts        api.Options
-	flags       api.Flags
-	command     Command
-	namedArgs   []string
+	name         string
+	description  string
+	statement    Statement
+	opts         api.Options
+	flags        api.Flags
+	command      Command
+	namedArgs    []string
 	variadicArgs []string
-	namespace   api.Namespace
-	optionWidth int
-	flagWidth   int
+	namespace    api.Namespace
+	optionWidth  int
+	flagWidth    int
 }
 
 func (c cmd) Name() string {
@@ -140,13 +140,13 @@ func (c cmd) Exec(path []string, options map[string]string, flags map[string]boo
 				return false, fmt.Errorf(c.usage(fullPath, msg))
 			}
 			var optFlg string
-			if c.opts.Count() > 0 && c.flags.Count() > 0{
+			if c.opts.Count() > 0 && c.flags.Count() > 0 {
 				optFlg = "option or flag"
-			}else if c.opts.Count() > 0 {
+			} else if c.opts.Count() > 0 {
 				optFlg = "option"
-			}else if c.flags.Count() > 0 {
+			} else if c.flags.Count() > 0 {
 				optFlg = "flag"
-			}else{
+			} else {
 				optFlg = "command"
 			}
 			msg := fmt.Sprintf("Error: unknown %s (%s)", optFlg, args[0])
@@ -159,18 +159,18 @@ func (c cmd) Exec(path []string, options map[string]string, flags map[string]boo
 		var msg string
 		if missing == 1 {
 			msg = fmt.Sprintf("Error: argument is missing (%s)", strings.Join(c.namedArgs[start:], ", "))
-		}else {
+		} else {
 			msg = fmt.Sprintf("Error: arguments are missing (%s)", strings.Join(c.namedArgs[start:], ", "))
 		}
 		return false, fmt.Errorf(c.usage(fullPath, msg))
 	}
-	if len(args) > len(c.namedArgs) && len(c.variadicArgs) == 0  {
+	if len(args) > len(c.namedArgs) && len(c.variadicArgs) == 0 {
 		extraArgs := args[len(c.namedArgs):]
 		var msg string
 		if len(extraArgs) == 1 {
 			msg = fmt.Sprintf("Error: unexpected argument (%s)", extraArgs[0])
 
-		}else {
+		} else {
 			msg = fmt.Sprintf("Error: unexpected arguments (%s)", strings.Join(extraArgs, ", "))
 		}
 		return false, fmt.Errorf(c.usage(fullPath, msg))
@@ -185,7 +185,7 @@ func (c cmd) Exec(path []string, options map[string]string, flags map[string]boo
 	}
 	ctx := context(path, options, flags, mappedArgs, variadicArgs, args, usage)
 	if err := c.command.Exec(ctx); err != nil {
-		return false, err 
+		return false, err
 	}
 	return true, nil
 }
@@ -200,13 +200,13 @@ func (c cmd) extract(options map[string]string, flags map[string]bool, args []st
 	return args
 }
 
-func(c cmd) String(width int) string {
+func (c cmd) String(width int) string {
 	return fmt.Sprintf("%-[1]*s  %s\n", width, c.name, c.description)
 }
 
 func (c cmd) usage(path string, summaries ...string) string {
 	var text, args strings.Builder
-	if len(c.namedArgs) + len(c.variadicArgs) > 0 {
+	if len(c.namedArgs)+len(c.variadicArgs) > 0 {
 		args.WriteString("[--] ")
 		args.WriteString(strings.Join(c.namedArgs, " "))
 		if len(c.namedArgs) > 0 {
@@ -215,11 +215,11 @@ func (c cmd) usage(path string, summaries ...string) string {
 		args.WriteString(strings.Join(c.variadicArgs, " "))
 	}
 	var optFlg string
-	if c.opts.Count() > 0 && c.flags.Count() > 0{
+	if c.opts.Count() > 0 && c.flags.Count() > 0 {
 		optFlg = "[OPTIONS|FLAGS] "
-	}else if c.opts.Count() > 0 {
+	} else if c.opts.Count() > 0 {
 		optFlg = "[OPTIONS] "
-	}else if c.flags.Count() > 0 {
+	} else if c.flags.Count() > 0 {
 		optFlg = "[FLAGS] "
 	}
 	text.WriteString(fmt.Sprintf("\nUsage: %s %s%s\n\n", path, optFlg, args.String()))

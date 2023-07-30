@@ -41,4 +41,3 @@ func (s _statements) String(path string) string {
 	}
 	return text.String()
 }
-

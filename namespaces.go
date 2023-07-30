@@ -14,7 +14,7 @@
 
 package cli
 
-import(
+import (
 	"github.com/begopher/cli/api"
 )
 
@@ -45,7 +45,7 @@ func(n _namespaces) Has(key string) bool {
 	}
 	return false
 }
-*/ 
+*/
 func (n _namespaces) Add(name string) error {
 	for _, namespace := range n.namespaces {
 		if err := namespace.Add(name); err != nil {
@@ -63,6 +63,7 @@ func (n _namespaces) AddAll(names []string) error {
 	}
 	return nil
 }
+
 /*
 func (n _namespaces) AddNamespace(namespace api.Namespace) {
 	n.namespaces = append(n.namespaces, namespace)

@@ -16,8 +16,8 @@ package cli
 
 import (
 	"fmt"
-	"strings"
 	"github.com/begopher/cli/api"
+	"strings"
 )
 
 func Options(opts ...api.Option) options {
@@ -26,7 +26,7 @@ func Options(opts ...api.Option) options {
 		if option == nil {
 			panic("cli.Options: nil value is not allowed")
 		}
-		if err := namespace.Add(option.SName()); err != nil{
+		if err := namespace.Add(option.SName()); err != nil {
 			msg := fmt.Sprintf("cli.Options: %s is duplicated", option.SName())
 			panic(msg)
 		}
@@ -36,7 +36,7 @@ func Options(opts ...api.Option) options {
 		}
 	}
 	return options{
-		opts:opts,
+		opts: opts,
 	}
 }
 
@@ -64,7 +64,7 @@ func (o options) Default(to map[string]string) {
 }
 
 func (o options) Names() []string {
-	names := make([]string,0, len(o.opts) + len(o.opts))
+	names := make([]string, 0, len(o.opts)+len(o.opts))
 	for _, option := range o.opts {
 		sname := option.SName()
 		if sname != "" {
@@ -84,7 +84,7 @@ func (o options) Count() int {
 
 func (o options) LNameWidth() int {
 	var width int
-	for _, option:= range o.opts {
+	for _, option := range o.opts {
 		name := option.LName()
 		if width < len(name) {
 			width = len(name)
@@ -111,11 +111,11 @@ func (o options) Has(option string) bool {
 		return false
 	}
 	if strings.HasPrefix(option, "-") {
-		if name, ok := strings.CutPrefix(option, "--"); ok && len(name) > 1{
+		if name, ok := strings.CutPrefix(option, "--"); ok && len(name) > 1 {
 			option = name
 			goto search
 		}
-		if name, ok := strings.CutPrefix(option, "-"); ok && len(name) == 1{
+		if name, ok := strings.CutPrefix(option, "-"); ok && len(name) == 1 {
 			option = name
 			goto search
 		}

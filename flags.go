@@ -16,8 +16,8 @@ package cli
 
 import (
 	"fmt"
-	"strings"
 	"github.com/begopher/cli/api"
+	"strings"
 )
 
 func Flags(flgs ...api.Flag) flags {
@@ -81,7 +81,7 @@ func (f flags) Namespace() api.Namespace {
 */
 
 func (f flags) Names() []string {
-	names := make([]string,0, len(f.flgs) + len(f.flgs))
+	names := make([]string, 0, len(f.flgs)+len(f.flgs))
 	for _, flag := range f.flgs {
 		sname := flag.SName()
 		if sname != "" {
@@ -101,7 +101,7 @@ func (f flags) Count() int {
 
 func (f flags) LNameWidth() int {
 	var width int
-	for _, flag:= range f.flgs {
+	for _, flag := range f.flgs {
 		name := flag.LName()
 		if width < len(name) {
 			width = len(name)

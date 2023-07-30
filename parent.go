@@ -16,11 +16,11 @@ package cli
 
 import (
 	"fmt"
-	"strings"
 	"github.com/begopher/cli/api"
+	"strings"
 )
 
-func Parent(name, description string, statement Statement, options api.Options, flags api.Flags,  cmds ...api.Cmd) api.Cmd {
+func Parent(name, description string, statement Statement, options api.Options, flags api.Flags, cmds ...api.Cmd) api.Cmd {
 	name = strings.TrimSpace(name)
 	description = strings.TrimSpace(description)
 	if name == "" {
@@ -65,9 +65,9 @@ func Parent(name, description string, statement Statement, options api.Options, 
 		options:     options,
 		flags:       flags,
 		cmds:        _cmds,
-		flagWidth:    flags.LNameWidth(),
-		optionWidth:  options.LNameWidth(),
-		namespace: namespaces,
+		flagWidth:   flags.LNameWidth(),
+		optionWidth: options.LNameWidth(),
+		namespace:   namespaces,
 	}
 }
 
@@ -80,7 +80,7 @@ type parent struct {
 	cmds        api.Cmds
 	flagWidth   int
 	optionWidth int
-	namespace api.Namespace
+	namespace   api.Namespace
 }
 
 func (p parent) Name() string {
@@ -116,13 +116,13 @@ func (p parent) Exec(path []string, options map[string]string, flags map[string]
 			return false, fmt.Errorf(p.usage(fullPath, msg))
 		}
 		var optFlg string
-		if p.options.Count() > 0 && p.flags.Count() > 0{
+		if p.options.Count() > 0 && p.flags.Count() > 0 {
 			optFlg = "option or flag"
-		}else if p.options.Count() > 0 {
+		} else if p.options.Count() > 0 {
 			optFlg = "option"
-		}else if p.flags.Count() > 0 {
+		} else if p.flags.Count() > 0 {
 			optFlg = "flag"
-		}else{
+		} else {
 			optFlg = "command"
 		}
 		msg := fmt.Sprintf("Error: unknown %s (%s)", optFlg, args[0])
@@ -149,14 +149,13 @@ func (p parent) extract(options map[string]string, flags map[string]bool, args [
 	return args
 }
 
-
 func (p parent) usage(path string, errors ...string) string {
 	var optFlg string
-	if p.options.Count() > 0 && p.flags.Count() > 0{
+	if p.options.Count() > 0 && p.flags.Count() > 0 {
 		optFlg = "[OPTIONS|FLAGS] "
-	}else if p.options.Count() > 0 {
+	} else if p.options.Count() > 0 {
 		optFlg = "[OPTIONS] "
-	}else if p.flags.Count() > 0 {
+	} else if p.flags.Count() > 0 {
 		optFlg = "[FLAGS] "
 	}
 	var text strings.Builder
@@ -168,7 +167,7 @@ func (p parent) usage(path string, errors ...string) string {
 	text.WriteString(p.options.String(p.optionWidth))
 	text.WriteString(p.flags.String(p.flagWidth))
 	if len(errors) > 0 {
-		for _, msg := range errors{
+		for _, msg := range errors {
 			text.WriteString(msg)
 			text.WriteString("\n")
 		}
@@ -182,7 +181,7 @@ func (p parent) Namespace() api.Namespace {
 	return p.namespace
 }
 
-func (p parent) String(width int) string{
+func (p parent) String(width int) string {
 	return fmt.Sprintf("%-[1]*s  %s\n", width, p.name, p.description)
 }
 

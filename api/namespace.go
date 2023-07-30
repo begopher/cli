@@ -18,4 +18,3 @@ type Namespace interface {
 	Add(key string) error
 	AddAll([]string) error
 }
-

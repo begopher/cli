@@ -14,10 +14,10 @@
 
 package cli
 
-import(
+import (
 	"fmt"
-	"strings"
 	"github.com/begopher/cli/api"
+	"strings"
 )
 
 type _cmds struct {
@@ -33,7 +33,7 @@ func Cmds(cmds []api.Cmd) _cmds {
 	xNamespaces := make([]api.Namespace, len(cmds))
 	sibling := Namespace()
 	var nameWidth int
-	for i, cmd := range cmds{
+	for i, cmd := range cmds {
 		if cmd == nil {
 			panic("cli.Cmds: nil is not accepted as a valid cmd value")
 		}

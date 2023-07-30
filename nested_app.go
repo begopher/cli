@@ -42,7 +42,7 @@ func NestedApp(name, description string, statement Statement, options api.Option
 	if group == nil {
 		panic("cli.Application: cannot be created from nil group")
 	}
-	grps := make([]api.Group, len(groups) + 1)
+	grps := make([]api.Group, len(groups)+1)
 	grps[0] = group
 	for i, group := range groups {
 		grps[i+1] = group
@@ -68,10 +68,10 @@ func NestedApp(name, description string, statement Statement, options api.Option
 		name:        name,
 		description: description,
 		statement:   statement,
-		options:        options,
-		flags:        flags,
-		groups:  _groups,
-		flagWidth:  flags.LNameWidth(),
+		options:     options,
+		flags:       flags,
+		groups:      _groups,
+		flagWidth:   flags.LNameWidth(),
 		optionWidth: options.LNameWidth(),
 	}
 }
@@ -79,21 +79,21 @@ func NestedApp(name, description string, statement Statement, options api.Option
 type application struct {
 	name        string
 	description string
-	statement Statement
-	options        api.Options
-	flags        api.Flags
-	groups api.Groups
-	flagWidth int
+	statement   Statement
+	options     api.Options
+	flags       api.Flags
+	groups      api.Groups
+	flagWidth   int
 	optionWidth int
 }
 
-func (a application) Run(args []string) error{
+func (a application) Run(args []string) error {
 	if len(args) == 0 {
 		return fmt.Errorf(a.usage())
 	}
 	if a.name != args[0] {
 		return fmt.Errorf(a.usage())
-		
+
 	}
 	path := []string{a.name}
 	args = args[1:]
@@ -114,13 +114,13 @@ func (a application) Run(args []string) error{
 			return fmt.Errorf(a.usage(msg))
 		}
 		var optFlg string
-		if a.options.Count() > 0 && a.flags.Count() > 0{
+		if a.options.Count() > 0 && a.flags.Count() > 0 {
 			optFlg = "option or flag"
-		}else if a.options.Count() > 0 {
+		} else if a.options.Count() > 0 {
 			optFlg = "option"
-		}else if a.flags.Count() > 0 {
+		} else if a.flags.Count() > 0 {
 			optFlg = "flag"
-		}else{
+		} else {
 			optFlg = "command"
 		}
 		msg := fmt.Sprintf("Error: unknown %s (%s)", optFlg, args[0])
@@ -149,11 +149,11 @@ func (a application) extract(options map[string]string, flags map[string]bool, a
 
 func (a application) usage(errors ...string) string {
 	var optFlg string
-	if a.options.Count() > 0 && a.flags.Count() > 0{
+	if a.options.Count() > 0 && a.flags.Count() > 0 {
 		optFlg = "[OPTIONS|FLAGS] "
-	}else if a.options.Count() > 0 {
+	} else if a.options.Count() > 0 {
 		optFlg = "[OPTIONS] "
-	}else if a.flags.Count() > 0 {
+	} else if a.flags.Count() > 0 {
 		optFlg = "[FLAGS] "
 	}
 	var text strings.Builder
@@ -163,7 +163,7 @@ func (a application) usage(errors ...string) string {
 	text.WriteString(a.options.String(a.optionWidth))
 	text.WriteString(a.flags.String(a.flagWidth))
 	if len(errors) > 0 {
-		for _, msg := range errors{
+		for _, msg := range errors {
 			text.WriteString(msg)
 			text.WriteString("\n")
 		}

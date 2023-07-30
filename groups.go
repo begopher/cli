@@ -14,10 +14,10 @@
 
 package cli
 
-import(
+import (
 	"fmt"
-        "strings"
 	"github.com/begopher/cli/api"
+	"strings"
 )
 
 func Groups(grps []api.Group) groups {
@@ -39,20 +39,19 @@ func Groups(grps []api.Group) groups {
 		}
 	}
 	return groups{
-		grps: grps,
+		grps:      grps,
 		namespace: Namespaces(namespaces),
 	}
 }
 
 type groups struct {
-	grps []api.Group
+	grps      []api.Group
 	namespace api.Namespace
 }
 
-
 func (g groups) Exec(path []string, options map[string]string, flags map[string]bool, args []string) (bool, error) {
 	for _, group := range g.grps {
-		ok , err:= group.Exec(path, options, flags, args)
+		ok, err := group.Exec(path, options, flags, args)
 		if err != nil {
 			return ok, err
 		}
@@ -65,16 +64,13 @@ func (g groups) Exec(path []string, options map[string]string, flags map[string]
 
 func (g groups) String() string {
 	var text strings.Builder
-        for _, group := range g.grps{
-                text.WriteString(group.String())
+	for _, group := range g.grps {
+		text.WriteString(group.String())
 		text.WriteString("\n")
 	}
 	return text.String()
 }
 
-
 func (g groups) Namespace() api.Namespace {
 	return g.namespace
 }
-
-

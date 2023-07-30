@@ -96,7 +96,7 @@ func (f flag) Extract(opts map[string]bool, args []string) []string {
 }
 
 func (f flag) Default(flags map[string]bool) {
-	 _, ok := flags[f.lname]
+	_, ok := flags[f.lname]
 	if f.lname != "" && !ok {
 		flags[f.lname] = false
 	}

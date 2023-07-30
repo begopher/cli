@@ -14,12 +14,11 @@
 
 package cli
 
-
 func NoStatement() noStatement {
 	return noStatement{}
 }
 
-type noStatement struct {}
+type noStatement struct{}
 
 func (n noStatement) String(string) string {
 	return ""
