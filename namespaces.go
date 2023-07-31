@@ -34,17 +34,17 @@ type _namespaces struct {
 }
 
 /*
-func(n _namespaces) Has(key string) bool {
-	if _, ok := n.namespace[key]; ok {
-		return true
-	}
-	for _, namespace := range n.namespaces {
-		if ok := namespace.Has(key); ok {
-			return ok
+	func(n _namespaces) Has(key string) bool {
+		if _, ok := n.namespace[key]; ok {
+			return true
 		}
+		for _, namespace := range n.namespaces {
+			if ok := namespace.Has(key); ok {
+				return ok
+			}
+		}
+		return false
 	}
-	return false
-}
 */
 func (n _namespaces) Add(name string) error {
 	for _, namespace := range n.namespaces {

@@ -16,7 +16,8 @@ package cli
 
 import (
 //	"fmt"
-//"strings"
+//
+// "strings"
 )
 
 type Statement interface {

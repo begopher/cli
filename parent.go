@@ -115,17 +115,19 @@ func (p parent) Exec(path []string, options map[string]string, flags map[string]
 			msg := fmt.Sprintf("Error: missing value for %s option", args[0])
 			return false, fmt.Errorf(p.usage(fullPath, msg))
 		}
-		var optFlg string
 		if p.options.Count() > 0 && p.flags.Count() > 0 {
-			optFlg = "option or flag"
-		} else if p.options.Count() > 0 {
-			optFlg = "option"
-		} else if p.flags.Count() > 0 {
-			optFlg = "flag"
-		} else {
-			optFlg = "command"
+			msg := fmt.Sprintf("Error: unknown option or flag (%s)", args[0])
+			return false, fmt.Errorf(p.usage(fullPath, msg))
 		}
-		msg := fmt.Sprintf("Error: unknown %s (%s)", optFlg, args[0])
+		if p.options.Count() > 0 {
+			msg := fmt.Sprintf("Error: unknown option (%s)", args[0])
+			return false, fmt.Errorf(p.usage(fullPath, msg))
+		}
+		if p.flags.Count() > 0 {
+			msg := fmt.Sprintf("Error: unknown flag (%s)", args[0])
+			return false, fmt.Errorf(p.usage(fullPath, msg))
+		}
+		msg := fmt.Sprintf("Error: unknown command (%s)", args[0])
 		return false, fmt.Errorf(p.usage(fullPath, msg))
 	}
 	ok, err := p.cmds.Exec(path, options, flags, args)
@@ -135,7 +137,7 @@ func (p parent) Exec(path []string, options map[string]string, flags map[string]
 	if ok {
 		return ok, err
 	}
-	msg := fmt.Sprintf("Error: unknown command: %s", args[0])
+	msg := fmt.Sprintf("Error: unknown command (%s)", args[0])
 	return false, fmt.Errorf(p.usage(fullPath, msg))
 }
 
