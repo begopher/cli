@@ -20,13 +20,7 @@ import (
 	"strings"
 )
 
-type _cmds struct {
-	cmds      []api.Cmd
-	namespace api.Namespace
-	nameWidth int
-}
-
-func Cmds(cmds []api.Cmd) _cmds {
+func cmds(cmds []api.Cmd) _cmds {
 	if len(cmds) < 1 {
 		panic("cli.Cmds: cannot be created from empty or nil slice")
 	}
@@ -51,6 +45,12 @@ func Cmds(cmds []api.Cmd) _cmds {
 		namespace: Namespaces(xNamespaces),
 		nameWidth: nameWidth,
 	}
+}
+
+type _cmds struct {
+	cmds      []api.Cmd
+	namespace api.Namespace
+	nameWidth int
 }
 
 func (c _cmds) Exec(path []string, options map[string]string, flags map[string]bool, args []string) (bool, error) {

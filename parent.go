@@ -20,7 +20,7 @@ import (
 	"strings"
 )
 
-func Parent(name, description string, statement Statement, options api.Options, flags api.Flags, cmds ...api.Cmd) api.Cmd {
+func Parent(name, description string, statement Statement, options api.Options, flags api.Flags, manyCmds ...api.Cmd) api.Cmd {
 	name = strings.TrimSpace(name)
 	description = strings.TrimSpace(description)
 	if name == "" {
@@ -32,7 +32,7 @@ func Parent(name, description string, statement Statement, options api.Options, 
 	if strings.HasPrefix(name, "-") {
 		panic("cli.Parent: name cannot start with -")
 	}
-	if len(cmds) < 1 {
+	if len(manyCmds) < 1 {
 		panic("cmd.Parent: cannot be created from empty/nil cmds")
 	}
 	if statement == nil {
@@ -44,7 +44,7 @@ func Parent(name, description string, statement Statement, options api.Options, 
 	if flags == nil {
 		flags = Flags()
 	}
-	_cmds := Cmds(cmds)
+	_cmds := cmds(manyCmds)
 	namespaces := _cmds.Namespace()
 	if err := namespaces.Add(name); err != nil {
 		msg := fmt.Sprintf("cli.Parent: name(%s) is duplicated, with a cmd child or one of its flag/option", name)
