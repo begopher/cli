@@ -19,7 +19,7 @@ import (
 	"github.com/begopher/cli/api"
 )
 
-func Namespace() api.Namespace {
+func namespace() api.Namespace {
 	return _namespace{make(map[string]bool)}
 }
 

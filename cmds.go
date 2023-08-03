@@ -25,7 +25,7 @@ func cmds(cmds []api.Cmd) _cmds {
 		panic("cli.Cmds: cannot be created from empty or nil slice")
 	}
 	xNamespaces := make([]api.Namespace, len(cmds))
-	sibling := Namespace()
+	sibling := namespace()
 	var nameWidth int
 	for i, cmd := range cmds {
 		if cmd == nil {

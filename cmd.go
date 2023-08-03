@@ -47,7 +47,7 @@ func Cmd(name string, description string, statement Statement, opts api.Options,
 	if command == nil {
 		panic("cli.Cmd: command (user implementation) cannot be empty")
 	}
-	namespace := Namespace()
+	namespace := namespace()
 	namespace.AddAll(opts.Names())
 	if err := namespace.AddAll(flgs.Names()); err != nil {
 		panic("cli.Cmd: options and flags have identical names")

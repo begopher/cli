@@ -21,7 +21,7 @@ import (
 )
 
 func Options(opts ...api.Option) options {
-	namespace := Namespace()
+	namespace := namespace()
 	for _, option := range opts {
 		if option == nil {
 			panic("cli.Options: nil value is not allowed")

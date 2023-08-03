@@ -25,8 +25,8 @@ func Groups(grps []api.Group) groups {
 		panic("cli.Groups: grps cannot be nil or empty slice")
 	}
 	namespaces := make([]api.Namespace, len(grps))
-	groupNamespace := Namespace()
-	cmdNamespace := Namespace()
+	groupNamespace := namespace()
+	cmdNamespace := namespace()
 	for i, group := range grps {
 		namespaces[i] = group.Namespace()
 		if err := groupNamespace.Add(group.Name()); err != nil {

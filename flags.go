@@ -22,7 +22,7 @@ import (
 
 func Flags(flgs ...api.Flag) flags {
 	//namespace := make(map[string]bool)
-	namespace := Namespace()
+	namespace := namespace()
 	for _, flag := range flgs {
 		if flag == nil {
 			panic("cli.Flags: nil value is not allowed")
