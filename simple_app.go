@@ -17,7 +17,7 @@ package cli
 import (
 	"fmt"
 
-	"github.com/begopher/cli/api"
+	"github.com/begopher/cli/internal/api"
 )
 
 func SimpleApp(name, description string, statement Statement, options api.Options, flags api.Flags, args []string, implementation Command) simpleApp {

@@ -16,7 +16,7 @@ package cli
 
 import (
 	"fmt"
-	"github.com/begopher/cli/api"
+	"github.com/begopher/cli/internal/api"
 	"strings"
 )
 

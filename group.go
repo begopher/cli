@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/begopher/cli/api"
+	"github.com/begopher/cli/internal/api"
 )
 
 func Group(name string, manyCmds ...api.Cmd) group {

@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/begopher/cli/api"
+	"github.com/begopher/cli/internal/api"
 )
 
 func NestedApp(name, description string, statement Statement, options api.Options, flags api.Flags, varGroups ...api.Group) application {

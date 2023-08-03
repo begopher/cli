@@ -15,7 +15,7 @@
 package cli
 
 import (
-	"github.com/begopher/cli/api"
+	"github.com/begopher/cli/internal/api"
 )
 
 func namespaces(namespaces []api.Namespace) _namespaces {
