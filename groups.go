@@ -20,7 +20,7 @@ import (
 	"strings"
 )
 
-func Groups(grps []api.Group) groups {
+func groups(grps []api.Group) _groups {
 	if len(grps) < 1 {
 		panic("cli.Groups: grps cannot be nil or empty slice")
 	}
@@ -38,18 +38,18 @@ func Groups(grps []api.Group) groups {
 			panic(msg)
 		}
 	}
-	return groups{
+	return _groups{
 		grps:      grps,
 		namespace: namespaces(xnamespaces),
 	}
 }
 
-type groups struct {
+type _groups struct {
 	grps      []api.Group
 	namespace api.Namespace
 }
 
-func (g groups) Exec(path []string, options map[string]string, flags map[string]bool, args []string) (bool, error) {
+func (g _groups) Exec(path []string, options map[string]string, flags map[string]bool, args []string) (bool, error) {
 	for _, group := range g.grps {
 		ok, err := group.Exec(path, options, flags, args)
 		if err != nil {
@@ -62,7 +62,7 @@ func (g groups) Exec(path []string, options map[string]string, flags map[string]
 	return false, nil
 }
 
-func (g groups) String() string {
+func (g _groups) String() string {
 	var text strings.Builder
 	for _, group := range g.grps {
 		text.WriteString(group.String())
@@ -71,6 +71,6 @@ func (g groups) String() string {
 	return text.String()
 }
 
-func (g groups) Namespace() api.Namespace {
+func (g _groups) Namespace() api.Namespace {
 	return g.namespace
 }
