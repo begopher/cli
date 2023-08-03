@@ -24,11 +24,11 @@ func Groups(grps []api.Group) groups {
 	if len(grps) < 1 {
 		panic("cli.Groups: grps cannot be nil or empty slice")
 	}
-	namespaces := make([]api.Namespace, len(grps))
+	xnamespaces := make([]api.Namespace, len(grps))
 	groupNamespace := namespace()
 	cmdNamespace := namespace()
 	for i, group := range grps {
-		namespaces[i] = group.Namespace()
+		xnamespaces[i] = group.Namespace()
 		if err := groupNamespace.Add(group.Name()); err != nil {
 			msg := fmt.Sprintf("cli.Groups: name (%s) is taken by two group", group.Name())
 			panic(msg)
@@ -40,7 +40,7 @@ func Groups(grps []api.Group) groups {
 	}
 	return groups{
 		grps:      grps,
-		namespace: Namespaces(namespaces),
+		namespace: namespaces(xnamespaces),
 	}
 }
 

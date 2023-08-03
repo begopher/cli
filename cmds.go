@@ -42,7 +42,7 @@ func cmds(cmds []api.Cmd) _cmds {
 	}
 	return _cmds{
 		cmds:      cmds,
-		namespace: Namespaces(xNamespaces),
+		namespace: namespaces(xNamespaces),
 		nameWidth: nameWidth,
 	}
 }

@@ -18,7 +18,7 @@ import (
 	"github.com/begopher/cli/api"
 )
 
-func Namespaces(namespaces []api.Namespace) _namespaces {
+func namespaces(namespaces []api.Namespace) _namespaces {
 	//ns := make([]api.Namespace, len(namespaces) + 1)
 	//ns[0] = namespace
 	//for i, namespace := range namespaces {
