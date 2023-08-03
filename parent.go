@@ -112,7 +112,7 @@ func (p parent) Exec(path []string, options map[string]string, flags map[string]
 	}
 	if strings.HasPrefix(args[0], "-") {
 		if p.options.Has(args[0]) {
-			msg := fmt.Sprintf("Error: missing value for %s option", args[0])
+			msg := fmt.Sprintf("Error: missing value for %s option (e.g. %[1]s value)", args[0])
 			return false, fmt.Errorf(p.usage(fullPath, msg))
 		}
 		if p.options.Count() > 0 && p.flags.Count() > 0 {

@@ -108,22 +108,25 @@ func (a application) Run(args []string) error {
 	if args[0] == "--help" {
 		return fmt.Errorf(a.usage())
 	}
-	if strings.HasPrefix(args[0], "-") { // command name never start with -
-		if a.options.Has(args[0]) {
-			msg := fmt.Sprintf("Error: missing value for %s option", args[0])
+	if strings.HasPrefix(args[0], "-") {
+		if a.options.Has(args[0]) { //done
+			msg := fmt.Sprintf("Error: missing value for %s option (e.g. %[1]s value)", args[0])
 			return fmt.Errorf(a.usage(msg))
 		}
-		var optFlg string
-		if a.options.Count() > 0 && a.flags.Count() > 0 {
-			optFlg = "option or flag"
-		} else if a.options.Count() > 0 {
-			optFlg = "option"
-		} else if a.flags.Count() > 0 {
-			optFlg = "flag"
-		} else {
-			optFlg = "command"
+		if a.options.Count() > 0 && a.flags.Count() > 0 { //done
+			msg := fmt.Sprintf("Error: unknown option or flag (%s)", args[0])
+			return fmt.Errorf(a.usage(msg))
 		}
-		msg := fmt.Sprintf("Error: unknown %s (%s)", optFlg, args[0])
+		if a.options.Count() > 0 { //done
+			msg := fmt.Sprintf("Error: unknown option (%s)", args[0])
+			return fmt.Errorf(a.usage(msg))
+		}
+		if a.flags.Count() > 0 { //done
+			msg := fmt.Sprintf("Error: unknown flag (%s)", args[0])
+			return fmt.Errorf(a.usage(msg))
+		}
+		//done
+		msg := fmt.Sprintf("Error: unknown command (%s)", args[0])
 		return fmt.Errorf(a.usage(msg))
 	}
 	ok, err := a.groups.Exec(path, options, flags, args)

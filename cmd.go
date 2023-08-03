@@ -134,7 +134,7 @@ func (c cmd) Exec(path []string, options map[string]string, flags map[string]boo
 			args = args[1:]
 		} else if strings.HasPrefix(args[0], "-") {
 			if c.opts.Has(args[0]) { // done
-				msg := fmt.Sprintf("Error: value is missing for %s option", args[0])
+				msg := fmt.Sprintf("Error: missing value for %s option (e.g. %[1]s value)", args[0])
 				return false, fmt.Errorf(c.usage(fullPath, msg))
 			}
 			if c.opts.Count() > 0 && c.flags.Count() > 0 { // done
@@ -150,15 +150,19 @@ func (c cmd) Exec(path []string, options map[string]string, flags map[string]boo
 				return false, fmt.Errorf(c.usage(fullPath, msg))
 			}
 			if len(c.namedArgs) > 0 { // done
-				msg := fmt.Sprintf("Error: double hyphens (--) is missing before (%s) the value of argument %s", args[0], c.namedArgs[0])
+				msg := fmt.Sprintf("Error: double hyphens (--) is missing before (%s)", args[0])
 				return false, fmt.Errorf(c.usage(fullPath, msg))
 			}
 			if len(c.variadicArgs) > 0 { // done
-				msg := fmt.Sprintf("Error: double hyphens (--) is missing before (%s) the value of variadic argument %s", args[0], c.variadicArgs[0])
+				msg := fmt.Sprintf("Error: double hyphens (--) is missing before (%s)", args[0])
 				return false, fmt.Errorf(c.usage(fullPath, msg))
 			}
 			// done
-			msg := fmt.Sprintf("Error: unexpected argument (%s)", args[0])
+			if len(args) == 1 {
+				msg := fmt.Sprintf("Error: unexpected value (%s)", args[0])
+				return false, fmt.Errorf(c.usage(fullPath, msg))
+			}
+			msg := fmt.Sprintf("Error: unexpected values (%s)", strings.Join(args, ", "))
 			return false, fmt.Errorf(c.usage(fullPath, msg))
 		}
 	} //end if invalid option of flag
@@ -166,21 +170,21 @@ func (c cmd) Exec(path []string, options map[string]string, flags map[string]boo
 		missing := len(c.namedArgs) - len(args)
 		start := len(c.namedArgs) - missing
 		if missing == 1 { //done
-			msg := fmt.Sprintf("Error: argument is missing (%s)", strings.Join(c.namedArgs[start:], ", "))
+			msg := fmt.Sprintf("Error: missing value for (%s) argument", strings.Join(c.namedArgs[start:], ", "))
 			return false, fmt.Errorf(c.usage(fullPath, msg))
 		}
 		// done
-		msg := fmt.Sprintf("Error: arguments are missing (%s)", strings.Join(c.namedArgs[start:], ", "))
+		msg := fmt.Sprintf("Error: missing values for (%s) arguments", strings.Join(c.namedArgs[start:], ", "))
 		return false, fmt.Errorf(c.usage(fullPath, msg))
 	}
 	if len(args) > len(c.namedArgs) && len(c.variadicArgs) == 0 {
 		extraArgs := args[len(c.namedArgs):]
 		if len(extraArgs) == 1 { // done
-			msg := fmt.Sprintf("Error: unexpected argument (%s)", extraArgs[0])
+			msg := fmt.Sprintf("Error: unexpected value (%s)", extraArgs[0])
 			return false, fmt.Errorf(c.usage(fullPath, msg))
 		}
 		// done
-		msg := fmt.Sprintf("Error: unexpected arguments (%s)", strings.Join(extraArgs, ", "))
+		msg := fmt.Sprintf("Error: unexpected values (%s)", strings.Join(extraArgs, ", "))
 		return false, fmt.Errorf(c.usage(fullPath, msg))
 	}
 	mappedArgs := make(map[string]string, len(c.namedArgs))
