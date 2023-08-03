@@ -21,6 +21,7 @@ import (
 )
 
 func SimpleApp(name, description string, statement Statement, options api.Options, flags api.Flags, args []string, implementation Command) simpleApp {
+	name = removeAbsolutePath(name)
 	cmd := Cmd(
 		name,
 		description,
@@ -39,16 +40,19 @@ type simpleApp struct {
 }
 
 func (s simpleApp) Run(args []string) error {
+	if len(args) == 0 {
+		return fmt.Errorf(s.cmd.Help())
+	}
+	args[0] = removeAbsolutePath(args[0])
 	options := make(map[string]string, 0)
 	flags := make(map[string]bool, 0)
 	path := make([]string, 0)
-	fmt.Println(args)
 	ok, err := s.cmd.Exec(path, options, flags, args)
 	if err != nil {
 		return err
 	}
 	if !ok {
-		s.cmd.Help()
+		return fmt.Errorf(s.cmd.Help())
 	}
 	return nil
 }
