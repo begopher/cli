@@ -60,7 +60,8 @@ func NestedApp(name, description string, statement Statement, options api.Option
 		panic("cli.NestedApp: help cannot be used as a name of any object (reserved for --help)")
 	}
 	return application{
-		name:        name,
+		//name:        name,
+		name:        removeAbsolutePath(name),
 		description: description,
 		statement:   statement,
 		options:     options,
@@ -86,7 +87,9 @@ func (a application) Run(args []string) error {
 	if len(args) == 0 {
 		return fmt.Errorf(a.usage())
 	}
-	if a.name != args[0] {
+	// name := args[0]
+	name := removeAbsolutePath(args[0])
+	if a.name != name {
 		return fmt.Errorf(a.usage())
 
 	}

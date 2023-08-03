@@ -16,6 +16,8 @@ package cli
 
 import(
 	"fmt"
+	"os"
+	"strings"
 )
 
 func Error(c Context, err error) error {
@@ -25,3 +27,10 @@ func Error(c Context, err error) error {
 	}
 	return nil
 }
+
+
+func removeAbsolutePath(name string) string {
+	names := strings.Split(name, string(os.PathSeparator))
+	return names[len(names)-1]
+}
+	
