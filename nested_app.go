@@ -21,7 +21,7 @@ import (
 	"github.com/begopher/cli/api"
 )
 
-func NestedApp(name, description string, statement Statement, options api.Options, flags api.Flags, group api.Group, manyGroups ...api.Group) application {
+func NestedApp(name, description string, statement Statement, options api.Options, flags api.Flags, varGroups ...api.Group) application {
 	name = strings.TrimSpace(name)
 	description = strings.TrimSpace(description)
 	if name == "" {
@@ -39,16 +39,11 @@ func NestedApp(name, description string, statement Statement, options api.Option
 	if flags == nil {
 		flags = Flags()
 	}
-	if group == nil {
-		panic("cli.Application: cannot be created from nil group")
+	if len(varGroups) == 0 {
+		panic("cli.Application: cannot be created from nil/empty varGroups")
 	}
-	grps := make([]api.Group, len(manyGroups)+1)
-	grps[0] = group
-	for i, group := range manyGroups {
-		grps[i+1] = group
-	}
-	_groups := groups(grps)
-	namespace := _groups.Namespace()
+	groups := groups(varGroups)
+	namespace := groups.Namespace()
 	if err := namespace.Add(name); err != nil {
 		msg := fmt.Sprintf("cli.Application: application name (%s) is used by cmd, option or flag", name)
 		panic(msg)
@@ -70,7 +65,7 @@ func NestedApp(name, description string, statement Statement, options api.Option
 		statement:   statement,
 		options:     options,
 		flags:       flags,
-		groups:      _groups,
+		groups:      groups,
 		flagWidth:   flags.LNameWidth(),
 		optionWidth: options.LNameWidth(),
 	}
