@@ -20,7 +20,7 @@ import (
 	"github.com/begopher/cli/internal/api"
 )
 
-func SimpleApp(name, description string, statement Statement, options api.Options, flags api.Flags, args api.Arguments, vars api.Variadic,  implementation Command) simpleApp {
+func SimpleApp(name, description string, statement Statement, options api.Options, flags api.Flags, args api.Arguments, vars api.Variadic, implementation Command) simpleApp {
 	name = removeAbsolutePath(name)
 	cmd := Cmd(
 		name,
