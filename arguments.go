@@ -48,12 +48,17 @@ type arguments struct {
 }
 
 func (a arguments) Names() []string {
-	names := make([]string, 0, len(a.args))
+	names := make([]string, len(a.args))
 	for i, arg := range a.args{
 		names[i] = arg.Name()
 	}
 	return names
 }
+
+func(a arguments) Count() int {
+	return len(a.args)
+}
+
 func (a arguments) Extract(namedArgs map[string]string, args []string) ([]string, error) {
 	if len(a.args) > len(args) {
 		missing := len(a.args) - len(args)
@@ -64,7 +69,7 @@ func (a arguments) Extract(namedArgs map[string]string, args []string) ([]string
 			return args, err
 		}
 		remains := a.args[start:]
-		names := make([]string, 0, len(remains))
+		names := make([]string, len(remains))
 		for i, arg := range remains {
 			names[i] = arg.Name()
 		}
@@ -86,5 +91,6 @@ func (a arguments) String() string {
 	for _, arg := range a.args {
 		text.WriteString(arg.String(a.width))
 	}
+	text.WriteString("\n")
 	return text.String()
 }
