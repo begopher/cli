@@ -20,7 +20,7 @@ import (
 	"strings"
 )
 
-func Cmd(name string, description string, statement Statement, opts api.Options, flgs api.Flags, args []string, command Command) cmd {
+func Cmd(name string, description string, statement Statement, opts api.Options, flgs api.Flags, arguments api.Arguments, variadic api.Variadic, command Command) cmd {
 	name = strings.TrimSpace(name)
 	description = strings.TrimSpace(description)
 	if name == "" {
@@ -41,8 +41,11 @@ func Cmd(name string, description string, statement Statement, opts api.Options,
 	if flgs == nil {
 		flgs = Flags()
 	}
-	if args == nil {
-		args = []string{}
+	if arguments == nil {
+		arguments = Arguments()
+	}
+	if variadic == nil {
+		variadic = NoVariadic()
 	}
 	if command == nil {
 		panic("cli.Cmd: command (user implementation) cannot be empty")
@@ -56,6 +59,7 @@ func Cmd(name string, description string, statement Statement, opts api.Options,
 		msg := fmt.Sprintf("cli.Cmd: (%s) is identical to flag name or option name", name)
 		panic(msg)
 	}
+	/*
 	separator := len(args)
 	for i, arg := range args {
 		if arg == "" {
@@ -74,6 +78,7 @@ func Cmd(name string, description string, statement Statement, opts api.Options,
 	if separator == len(args)-1 {
 		panic("cli.Cmd: hint must be given when using variadic arguments")
 	}
+	*/
 	return cmd{
 		name:         name,
 		description:  description,
@@ -81,8 +86,10 @@ func Cmd(name string, description string, statement Statement, opts api.Options,
 		opts:         opts,
 		flags:        flgs,
 		command:      command,
-		namedArgs:    namedArgs,
-		variadicArgs: variadicArgs,
+		//namedArgs:    namedArgs,
+		arguments:    arguments,
+		//variadicArgs: variadicArgs,
+		variadic:     variadic,
 		namespace:    namespace,
 		optionWidth:  opts.LNameWidth(),
 		flagWidth:    flgs.LNameWidth(),
@@ -96,8 +103,10 @@ type cmd struct {
 	opts         api.Options
 	flags        api.Flags
 	command      Command
-	namedArgs    []string
-	variadicArgs []string
+	//namedArgs    []string
+	//variadicArgs []string
+	arguments    api.Arguments
+	variadic     api.Variadic
 	namespace    api.Namespace
 	optionWidth  int
 	flagWidth    int
@@ -149,11 +158,11 @@ func (c cmd) Exec(path []string, options map[string]string, flags map[string]boo
 				msg := fmt.Sprintf("Error: unknown flag (%s)", args[0])
 				return false, fmt.Errorf(c.usage(fullPath, msg))
 			}
-			if len(c.namedArgs) > 0 { // done
+			if c.arguments.Count() > 0 { // done
 				msg := fmt.Sprintf("Error: double hyphens (--) is missing before (%s)", args[0])
 				return false, fmt.Errorf(c.usage(fullPath, msg))
 			}
-			if len(c.variadicArgs) > 0 { // done
+			if c.variadic.Allowed() { // done
 				msg := fmt.Sprintf("Error: double hyphens (--) is missing before (%s)", args[0])
 				return false, fmt.Errorf(c.usage(fullPath, msg))
 			}
@@ -166,7 +175,12 @@ func (c cmd) Exec(path []string, options map[string]string, flags map[string]boo
 			return false, fmt.Errorf(c.usage(fullPath, msg))
 		}
 	} //end if invalid option of flag
-	if len(args) < len(c.namedArgs) {
+	mappedArgs := make(map[string]string, c.arguments.Count())
+	args, err := c.arguments.Extract(mappedArgs, args)
+	if err != nil {
+		return false, fmt.Errorf(c.usage(fullPath, err.Error()))
+	}
+	/*if len(args) < len(c.namedArgs) {
 		missing := len(c.namedArgs) - len(args)
 		start := len(c.namedArgs) - missing
 		if missing == 1 { //done
@@ -176,8 +190,13 @@ func (c cmd) Exec(path []string, options map[string]string, flags map[string]boo
 		// done
 		msg := fmt.Sprintf("Error: missing values for (%s) arguments", strings.Join(c.namedArgs[start:], ", "))
 		return false, fmt.Errorf(c.usage(fullPath, msg))
+	}*/
+	
+	variadicArgs, err := c.variadic.Extract(args)
+	if err != nil {
+		return false, fmt.Errorf(c.usage(fullPath, err.Error()))
 	}
-	if len(args) > len(c.namedArgs) && len(c.variadicArgs) == 0 {
+	/*if len(args) > len(c.namedArgs) && len(c.variadicArgs) == 0 {
 		extraArgs := args[len(c.namedArgs):]
 		if len(extraArgs) == 1 { // done
 			msg := fmt.Sprintf("Error: unexpected value (%s)", extraArgs[0])
@@ -186,12 +205,13 @@ func (c cmd) Exec(path []string, options map[string]string, flags map[string]boo
 		// done
 		msg := fmt.Sprintf("Error: unexpected values (%s)", strings.Join(extraArgs, ", "))
 		return false, fmt.Errorf(c.usage(fullPath, msg))
-	}
-	mappedArgs := make(map[string]string, len(c.namedArgs))
+	}*/
+	
+	/*mappedArgs := make(map[string]string, len(c.namedArgs))
 	for i, key := range c.namedArgs {
 		mappedArgs[key] = args[i]
-	}
-	variadicArgs := args[len(mappedArgs):]
+	}*/
+	//variadicArgs := args[len(mappedArgs):]
 	usage := func(summaries ...string) error {
 		return fmt.Errorf(c.usage(fullPath, summaries...))
 	}
@@ -218,13 +238,13 @@ func (c cmd) String(width int) string {
 
 func (c cmd) usage(path string, summaries ...string) string {
 	var text, args strings.Builder
-	if len(c.namedArgs)+len(c.variadicArgs) > 0 {
+	if c.arguments.Count() > 0 || c.variadic.Allowed() {
 		args.WriteString("[--] ")
-		args.WriteString(strings.Join(c.namedArgs, " "))
-		if len(c.namedArgs) > 0 {
+		args.WriteString(strings.Join(c.arguments.Names(), " "))
+		if c.arguments.Count() > 0 {
 			args.WriteString(" ")
 		}
-		args.WriteString(strings.Join(c.variadicArgs, " "))
+		args.WriteString(c.variadic.Arg())
 	}
 	var optFlg string
 	if c.opts.Count() > 0 && c.flags.Count() > 0 {
@@ -238,6 +258,8 @@ func (c cmd) usage(path string, summaries ...string) string {
 	text.WriteString(fmt.Sprintf("%s\n\n", c.description))
 	text.WriteString(c.opts.String(c.optionWidth))
 	text.WriteString(c.flags.String(c.flagWidth))
+	text.WriteString(c.arguments.String())
+	text.WriteString(c.variadic.String())
 	if len(summaries) > 0 {
 		for _, msg := range summaries {
 			text.WriteString(msg)
