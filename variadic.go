@@ -40,7 +40,8 @@ func (v variadic) String() string {
 	}
 	var text strings.Builder
 	text.WriteString("Variadic:\n")
-	msg := fmt.Sprintf("  %s  %s\n", v.arg, v.description)
+	msg := fmt.Sprintf("  [%s]  %s\n", v.arg, v.description)
 	text.WriteString(msg)
+	text.WriteString("\n")
 	return text.String()
 }
