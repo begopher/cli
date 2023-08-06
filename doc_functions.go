@@ -14,36 +14,26 @@
 
 package cli
 
-func Name(name string) string {
-	return name
+func Name(value string) string {
+	return value
 }
 
-func Description(description string) string {
-	return description
+func Description(value string) string {
+	return value
 }
 
-func ShortName(names ...string) string {
-	if len(names) == 0 {
-		return ""
-	}
-	return names[0]
+func ShortName(value string) string {
+	return value
 }
 
-func LongName(names ...string) string {
-	if len(names) == 0 {
-		return ""
-	}
-	return names[0]
+func LongName(value string) string {
+	return value
 }
 
-func Default(name string) string {
-	return name
+func Default(value string) string {
+	return value
 }
 
 func Implementation(command Command) Command {
 	return command
-}
-
-func Args(values ...string) []string {
-	return values
 }
