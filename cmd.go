@@ -66,7 +66,7 @@ func Cmd(name string, description string, statement Statement, opts api.Options,
 		opts:        opts,
 		flags:       flgs,
 		command:     command,
-		arguments: arguments,
+		arguments:   arguments,
 		variadic:    variadic,
 		namespace:   namespace,
 		optionWidth: opts.LNameWidth(),
@@ -202,17 +202,20 @@ func (c cmd) usage(path string, summaries ...string) string {
 	} else if c.flags.Count() > 0 {
 		optFlg = "[FLAGS] "
 	}
-	text.WriteString(fmt.Sprintf("\nUsage: %s %s%s\n\n", path, optFlg, args.String()))
-	text.WriteString(fmt.Sprintf("%s\n\n", c.description))
-	text.WriteString(c.opts.String(c.optionWidth))
-	text.WriteString(c.flags.String(c.flagWidth))
-	text.WriteString(c.arguments.String())
-	text.WriteString(c.variadic.String())
+	text.WriteString(fmt.Sprintf("Usage: %s %s%s\n\n", path, optFlg, args.String()))
+	text.WriteString(fmt.Sprintf("%s\n", c.description))
+	text.WriteString(c.opts.String(c.optionWidth)) //done
+	text.WriteString(c.flags.String(c.flagWidth))  //done
+	text.WriteString(c.arguments.String())         //done
+	text.WriteString(c.variadic.String())          //done
 	if len(summaries) > 0 {
+		text.WriteString("\n")
 		for _, msg := range summaries {
 			text.WriteString(msg)
 			text.WriteString("\n")
 		}
+	}
+	if !c.statement.Empty() {
 		text.WriteString("\n")
 	}
 	text.WriteString(c.statement.String(path))

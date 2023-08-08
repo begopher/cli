@@ -41,3 +41,12 @@ func (s _statements) String(path string) string {
 	}
 	return text.String()
 }
+
+func (s _statements) Empty() bool {
+	for _, stat := range s.statements {
+		if !stat.Empty() {
+			return false
+		}
+	}
+	return true
+}

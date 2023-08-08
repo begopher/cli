@@ -115,10 +115,10 @@ func (f flags) String(width int) string {
 	if len(f.flgs) < 1 {
 		return ""
 	}
+	text.WriteString("\n")
 	text.WriteString("Flags:\n")
 	for _, flag := range f.flgs {
 		text.WriteString(flag.String(width))
 	}
-	text.WriteString("\n")
 	return text.String()
 }

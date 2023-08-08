@@ -14,35 +14,7 @@
 
 package cli
 
-import (
-//	"fmt"
-//
-// "strings"
-)
-
 type Statement interface {
 	String(path string) string
+	Empty() bool
 }
-
-/*
-func Summary(lines ...string) summary {
-	return summary{lines}
-}
-
-type summary struct {
-	lines []string
-}
-
-func (s summary) String(path string) string {
-	var text strings.Builder
-	if len(s.lines) == 0 {
-		text.WriteString(fmt.Sprintf("Run '%s COMMAND --help' for more information on a command.\n", path))
-	}else {
-		for _, line := range s.lines {
-			text.WriteString(line)
-			text.WriteString("\n")
-		}
-	}
-	return text.String()
-}
-*/

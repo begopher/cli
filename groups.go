@@ -65,8 +65,8 @@ func (g _groups) Exec(path []string, options map[string]string, flags map[string
 func (g _groups) String() string {
 	var text strings.Builder
 	for _, group := range g.grps {
-		text.WriteString(group.String())
 		text.WriteString("\n")
+		text.WriteString(group.String())
 	}
 	return text.String()
 }

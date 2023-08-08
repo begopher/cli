@@ -23,3 +23,7 @@ type noStatement struct{}
 func (n noStatement) String(string) string {
 	return ""
 }
+
+func (noStatement) Empty() bool {
+	return true
+}

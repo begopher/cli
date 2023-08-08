@@ -161,18 +161,20 @@ func (p parent) usage(path string, errors ...string) string {
 		optFlg = "[FLAGS] "
 	}
 	var text strings.Builder
-	text.WriteString(fmt.Sprintf("\nUsage: %s %sCOMMAND\n\n", path, optFlg))
+	text.WriteString(fmt.Sprintf("Usage: %s %sCOMMAND\n\n", path, optFlg))
 	text.WriteString(fmt.Sprintf("%s\n\n", p.description))
 	text.WriteString("Commands:\n")
 	text.WriteString(p.cmds.String())
-	text.WriteString("\n")
 	text.WriteString(p.options.String(p.optionWidth))
 	text.WriteString(p.flags.String(p.flagWidth))
 	if len(errors) > 0 {
+		text.WriteString("\n")
 		for _, msg := range errors {
 			text.WriteString(msg)
 			text.WriteString("\n")
 		}
+	}
+	if !p.statement.Empty() {
 		text.WriteString("\n")
 	}
 	text.WriteString(p.statement.String(path))

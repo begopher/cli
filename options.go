@@ -98,11 +98,11 @@ func (o options) String(width int) string {
 		return ""
 	}
 	var text strings.Builder
+	text.WriteString("\n")
 	text.WriteString("Options:\n")
 	for _, opt := range o.opts {
 		text.WriteString(opt.String(width))
 	}
-	text.WriteString("\n")
 	return text.String()
 }
 

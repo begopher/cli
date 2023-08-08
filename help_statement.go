@@ -27,3 +27,7 @@ type helpStatement struct{}
 func (helpStatement) String(path string) string {
 	return fmt.Sprintf("Run '%s COMMAND --help' for more information on a command.\n", path)
 }
+
+func (helpStatement) Empty() bool {
+	return false
+}

@@ -37,3 +37,7 @@ func (s textStatement) String(string) string {
 	}
 	return text.String()
 }
+
+func (textStatement) Empty() bool {
+	return false
+}

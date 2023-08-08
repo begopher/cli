@@ -158,16 +158,19 @@ func (a application) usage(errors ...string) string {
 		optFlg = "[FLAGS] "
 	}
 	var text strings.Builder
-	text.WriteString(fmt.Sprintf("\nUsage: %s %sCOMMAND\n\n", a.name, optFlg))
-	text.WriteString(fmt.Sprintf("%s\n\n", a.description))
+	text.WriteString(fmt.Sprintf("Usage: %s %sCOMMAND\n\n", a.name, optFlg))
+	text.WriteString(fmt.Sprintf("%s\n", a.description))
 	text.WriteString(a.groups.String())
 	text.WriteString(a.options.String(a.optionWidth))
 	text.WriteString(a.flags.String(a.flagWidth))
 	if len(errors) > 0 {
+		text.WriteString("\n")
 		for _, msg := range errors {
 			text.WriteString(msg)
 			text.WriteString("\n")
 		}
+	}
+	if !a.statement.Empty() {
 		text.WriteString("\n")
 	}
 	text.WriteString(a.statement.String(a.name))

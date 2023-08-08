@@ -101,10 +101,10 @@ func (a arguments) String() string {
 		return ""
 	}
 	var text strings.Builder
+	text.WriteString("\n")
 	text.WriteString("Arguments:\n")
 	for _, arg := range a.args {
 		text.WriteString(arg.String(a.width))
 	}
-	text.WriteString("\n")
 	return text.String()
 }
