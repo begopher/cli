@@ -69,7 +69,6 @@ func Cmd(name string, description string, statement Statement, opts api.Options,
 		arguments:   arguments,
 		variadic:    variadic,
 		namespace:   namespace,
-		optionWidth: opts.LNameWidth(),
 		flagWidth:   flgs.LNameWidth(),
 	}
 }
@@ -84,7 +83,6 @@ type cmd struct {
 	arguments   api.Arguments
 	variadic    api.Variadic
 	namespace   api.Namespace
-	optionWidth int
 	flagWidth   int
 }
 
@@ -204,10 +202,10 @@ func (c cmd) usage(path string, summaries ...string) string {
 	}
 	text.WriteString(fmt.Sprintf("Usage: %s %s%s\n\n", path, optFlg, args.String()))
 	text.WriteString(fmt.Sprintf("%s\n", c.description))
-	text.WriteString(c.opts.String(c.optionWidth)) //done
-	text.WriteString(c.flags.String(c.flagWidth))  //done
-	text.WriteString(c.arguments.String())         //done
-	text.WriteString(c.variadic.String())          //done
+	text.WriteString(c.opts.String())             //done
+	text.WriteString(c.flags.String(c.flagWidth)) //done
+	text.WriteString(c.arguments.String())        //done
+	text.WriteString(c.variadic.String())         //done
 	if len(summaries) > 0 {
 		text.WriteString("\n")
 		for _, msg := range summaries {

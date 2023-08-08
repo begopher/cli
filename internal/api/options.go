@@ -20,6 +20,5 @@ type Options interface {
 	Names() []string
 	Has(string) bool
 	Count() int
-	LNameWidth() int
-	String(int) string
+	String() string
 }

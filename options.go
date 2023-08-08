@@ -22,6 +22,7 @@ import (
 
 func Options(opts ...api.Option) options {
 	namespace := namespace()
+	var width int
 	for _, option := range opts {
 		if option == nil {
 			panic("cli.Options: nil value is not allowed")
@@ -30,18 +31,24 @@ func Options(opts ...api.Option) options {
 			msg := fmt.Sprintf("cli.Options: %s is duplicated", option.SName())
 			panic(msg)
 		}
-		if err := namespace.Add(option.LName()); err != nil {
+		name := option.LName()
+		if err := namespace.Add(name); err != nil {
 			msg := fmt.Sprintf("cli.Options: %s is duplicated", option.LName())
 			panic(msg)
 		}
+		if width < len(name) {
+			width = len(name)
+		}
 	}
 	return options{
-		opts: opts,
+		opts:  opts,
+		width: width,
 	}
 }
 
 type options struct {
-	opts []api.Option
+	opts  []api.Option
+	width int
 }
 
 func (o options) Extract(to map[string]string, args []string) []string {
@@ -82,18 +89,7 @@ func (o options) Count() int {
 	return len(o.opts)
 }
 
-func (o options) LNameWidth() int {
-	var width int
-	for _, option := range o.opts {
-		name := option.LName()
-		if width < len(name) {
-			width = len(name)
-		}
-	}
-	return width
-}
-
-func (o options) String(width int) string {
+func (o options) String() string {
 	if len(o.opts) < 1 {
 		return ""
 	}
@@ -101,7 +97,7 @@ func (o options) String(width int) string {
 	text.WriteString("\n")
 	text.WriteString("Options:\n")
 	for _, opt := range o.opts {
-		text.WriteString(opt.String(width))
+		text.WriteString(opt.String(o.width))
 	}
 	return text.String()
 }

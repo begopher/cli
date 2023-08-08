@@ -68,7 +68,6 @@ func NestedApp(name, description string, statement Statement, options api.Option
 		flags:       flags,
 		groups:      groups,
 		flagWidth:   flags.LNameWidth(),
-		optionWidth: options.LNameWidth(),
 	}
 }
 
@@ -80,7 +79,6 @@ type application struct {
 	flags       api.Flags
 	groups      api.Groups
 	flagWidth   int
-	optionWidth int
 }
 
 func (a application) Run(args []string) error {
@@ -161,7 +159,7 @@ func (a application) usage(errors ...string) string {
 	text.WriteString(fmt.Sprintf("Usage: %s %sCOMMAND\n\n", a.name, optFlg))
 	text.WriteString(fmt.Sprintf("%s\n", a.description))
 	text.WriteString(a.groups.String())
-	text.WriteString(a.options.String(a.optionWidth))
+	text.WriteString(a.options.String())
 	text.WriteString(a.flags.String(a.flagWidth))
 	if len(errors) > 0 {
 		text.WriteString("\n")
