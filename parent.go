@@ -65,7 +65,6 @@ func Parent(name, description string, statement Statement, options api.Options, 
 		options:     options,
 		flags:       flags,
 		cmds:        _cmds,
-		flagWidth:   flags.LNameWidth(),
 		namespace:   namespaces,
 	}
 }
@@ -77,7 +76,6 @@ type parent struct {
 	options     api.Options
 	flags       api.Flags
 	cmds        api.Cmds
-	flagWidth   int
 	namespace   api.Namespace
 }
 
@@ -164,7 +162,7 @@ func (p parent) usage(path string, errors ...string) string {
 	text.WriteString("Commands:\n")
 	text.WriteString(p.cmds.String())
 	text.WriteString(p.options.String())
-	text.WriteString(p.flags.String(p.flagWidth))
+	text.WriteString(p.flags.String())
 	if len(errors) > 0 {
 		text.WriteString("\n")
 		for _, msg := range errors {

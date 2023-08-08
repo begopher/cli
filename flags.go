@@ -21,8 +21,8 @@ import (
 )
 
 func Flags(flgs ...api.Flag) flags {
-	//namespace := make(map[string]bool)
 	namespace := namespace()
+	var width int
 	for _, flag := range flgs {
 		if flag == nil {
 			panic("cli.Flags: nil value is not allowed")
@@ -31,24 +31,24 @@ func Flags(flgs ...api.Flag) flags {
 			msg := fmt.Sprintf("cli.Flags: %s is duplicated", flag.SName())
 			panic(msg)
 		}
-		//else if flag.SName() != "" {
-		//	namespace.Add(flag.SName())
-		//}
-		if err := namespace.Add(flag.LName()); err != nil {
+		name := flag.LName()
+		if err := namespace.Add(name); err != nil {
 			msg := fmt.Sprintf("cli.Flags: %s is duplicated", flag.LName())
 			panic(msg)
 		}
-		//else if flag.LName() != "" {
-		//	namespace.Add(flag.LName())
-		//}
+		if width < len(name) {
+			width = len(name)
+		}
 	}
 	return flags{
 		flgs: flgs,
+		width: width,
 	}
 }
 
 type flags struct {
 	flgs []api.Flag
+	width int
 }
 
 func (f flags) Extract(to map[string]bool, args []string) []string {
@@ -74,12 +74,6 @@ func (f flags) recursive(to map[string]bool, args []string) []string {
 	return args
 }
 
-/*
-func (f flags) Namespace() api.Namespace {
-	return f.namespace
-        }
-*/
-
 func (f flags) Names() []string {
 	names := make([]string, 0, len(f.flgs)+len(f.flgs))
 	for _, flag := range f.flgs {
@@ -99,18 +93,7 @@ func (f flags) Count() int {
 	return len(f.flgs)
 }
 
-func (f flags) LNameWidth() int {
-	var width int
-	for _, flag := range f.flgs {
-		name := flag.LName()
-		if width < len(name) {
-			width = len(name)
-		}
-	}
-	return width
-}
-
-func (f flags) String(width int) string {
+func (f flags) String() string {
 	var text strings.Builder
 	if len(f.flgs) < 1 {
 		return ""
@@ -118,7 +101,7 @@ func (f flags) String(width int) string {
 	text.WriteString("\n")
 	text.WriteString("Flags:\n")
 	for _, flag := range f.flgs {
-		text.WriteString(flag.String(width))
+		text.WriteString(flag.String(f.width))
 	}
 	return text.String()
 }

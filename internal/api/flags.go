@@ -19,6 +19,5 @@ type Flags interface {
 	Default(map[string]bool)
 	Names() []string
 	Count() int
-	LNameWidth() int
-	String(int) string
+	String() string
 }
