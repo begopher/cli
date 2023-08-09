@@ -147,8 +147,8 @@ func (c cmd) Exec(path []string, options map[string]string, flags map[string]boo
 			return false, fmt.Errorf(c.usage(fullPath, msg))
 		}
 	} //end if invalid option of flag
-	mappedArgs := make(map[string]string, c.arguments.Count())
-	args, err := c.arguments.Extract(mappedArgs, args)
+	namedArgs := make(map[string]string, c.arguments.Count())
+	args, err := c.arguments.Extract(namedArgs, args)
 	if err != nil {
 		return false, fmt.Errorf(c.usage(fullPath, err.Error()))
 	}
@@ -159,7 +159,7 @@ func (c cmd) Exec(path []string, options map[string]string, flags map[string]boo
 	usage := func(summaries ...string) error {
 		return fmt.Errorf(c.usage(fullPath, summaries...))
 	}
-	ctx := context(path, options, flags, mappedArgs, variadicArgs, args, usage)
+	ctx := context(path, options, flags, namedArgs, variadicArgs, usage)
 	if err := c.command.Exec(ctx); err != nil {
 		return false, err
 	}
@@ -200,10 +200,10 @@ func (c cmd) usage(path string, summaries ...string) string {
 	}
 	text.WriteString(fmt.Sprintf("Usage: %s %s%s\n\n", path, optFlg, args.String()))
 	text.WriteString(fmt.Sprintf("%s\n", c.description))
-	text.WriteString(c.opts.String())             //done
-	text.WriteString(c.flags.String()) //done
-	text.WriteString(c.arguments.String())        //done
-	text.WriteString(c.variadic.String())         //done
+	text.WriteString(c.opts.String())      //done
+	text.WriteString(c.flags.String())     //done
+	text.WriteString(c.arguments.String()) //done
+	text.WriteString(c.variadic.String())  //done
 	if len(summaries) > 0 {
 		text.WriteString("\n")
 		for _, msg := range summaries {

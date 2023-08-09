@@ -25,9 +25,7 @@ import (
 // value.
 //
 // The value of argument can be accessed by cli.Context.Argument("key"), where key
-// is the arugment name. Argument can also be accessed using cli.Context.Arguments()
-// method which returns a slice of string ([]string) that represents all named arguments
-// in correct order given by the client of your application.
+// is the arugment name.
 //
 // By having non-empty description, Usage message will become more verbose and include
 // a new section called Arguments. The new section lists the names and descriptions

@@ -19,22 +19,22 @@ type Context interface {
 	Flags() map[string]bool
 	Option(string) string
 	Options() map[string]string
-	Arg(string) string
-	Args() []string
+	Argument(string) string
+	//Arguments() []string has not extra value for client
 	Variadic() []string
 	Path() []string
 	Usage(...string) error
 }
 
-func context(path []string, options map[string]string, flags map[string]bool, namedArgs map[string]string, variadicArgs, args []string, usage func(...string) error) _context {
+func context(path []string, options map[string]string, flags map[string]bool, namedArgs map[string]string, variadicArgs []string, usage func(...string) error) _context {
 	return _context{
 		path:         path,
 		flags:        flags,
 		options:      options,
 		namedArgs:    namedArgs,
 		variadicArgs: variadicArgs,
-		args:         args,
-		usage:        usage,
+		//args:         args,
+		usage: usage,
 	}
 }
 
@@ -44,8 +44,8 @@ type _context struct {
 	options      map[string]string
 	namedArgs    map[string]string
 	variadicArgs []string
-	args         []string
-	usage        func(summaries ...string) error
+	//args         []string
+	usage func(summaries ...string) error
 }
 
 func (c _context) Flag(name string) bool {
@@ -64,13 +64,15 @@ func (c _context) Options() map[string]string {
 	return c.options
 }
 
-func (c _context) Arg(key string) string {
+func (c _context) Argument(key string) string {
 	return c.namedArgs[key]
 }
 
-func (c _context) Args() []string {
+/*
+func (c _context) Arguments() []string {
 	return c.args
 }
+*/
 
 func (c _context) Variadic() []string {
 	return c.variadicArgs
