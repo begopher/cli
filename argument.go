@@ -19,6 +19,22 @@ import (
 	"strings"
 )
 
+// Argument represents a required value which must be given by the client of
+// your application, if client failed to provides the expected value then
+// Usage message will be printed to the standard output, asking for the missing
+// value.
+//
+// The value of argument can be accessed by cli.Context.Argument("key"), where key
+// is the arugment name. Argument can also be accessed using cli.Context.Arguments()
+// method which returns a slice of string ([]string) that represents all named arguments
+// in correct order given by the client of your application.
+//
+// By having non-empty description, Usage message will become more verbose and include
+// a new section called Arguments. The new section lists the names and descriptions
+// of all arguments command might has.
+//
+// # Panic when:
+//   - name is an empty string.
 func Argument(name, description string) argument {
 	name = strings.TrimSpace(name)
 	if name == "" {

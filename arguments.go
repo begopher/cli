@@ -21,6 +21,16 @@ import (
 	"github.com/begopher/cli/internal/api"
 )
 
+// Arguments represent a collection of zero or more Argument.
+//
+// Client of cli library should not invoke any method of Arguments directly,
+// instead, Arguments should be passed to:
+//   - cli.Cmd(..., Arguments, ...) function.
+//
+// # Panic when:
+//   - two arguments has the same name.
+//   - some arguments have non-empty description, while others are empty.
+//     (all arguments must have description or all must be empty).
 func Arguments(args ...api.Argument) arguments {
 	if len(args) == 0 {
 		return arguments{
