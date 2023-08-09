@@ -20,6 +20,17 @@ import (
 	"strings"
 )
 
+// Options represent a collection of zero or more Option.
+//
+// Client of cli library should not invoke any method of Options directly,
+// instead, options should be passed to:
+//   - cli.Cmd(..., Options, ...) function.
+//   - cli.Parent(..., Options, ...) function.
+//   - cli.NestedApp(..., Options, ...) function.
+//
+// # Panic when:
+//   - one of the given option is nil value.
+//   - two options has the same short or long name
 func Options(opts ...api.Option) options {
 	namespace := namespace()
 	var width int

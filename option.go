@@ -19,6 +19,29 @@ import (
 	"strings"
 )
 
+// Option represents a command line option which may has a short and/or a long name.
+// description is used when Usage is printed to the standard output so clients of
+// the your command line application know the meaning of any particular option.
+//
+// Option may or may not have a default value. When a default value is set, it will
+// be printed between parentheses right after description when Usage is printed.
+//
+// The value of option wheither it is the default one, or the one which has been
+// given by the client of your application can be accessed by cli.Context.Option("key").
+// Where key can be ethier Option's short name and/or long name.
+//
+// Value can also be accessed by cli.Context.Options() which returns map[string]string
+// of all options with associated values.
+//
+// Client of cli library should not invoke any method of Option directly, instead, it should
+// be passed to the cli.Options(...Option) function.
+//
+// # Panic when:
+//   - Both short and long name are empty string. (option must have name).
+//   - Short name is two or more characters.
+//   - Long name is one character long.
+//   - Short or long name starts with hyphen e.g. "--full-name" instead of "full-name".
+//   - Description is empty. (Must tell your client the purpose of this option).
 func Option(sname string, lname, description, value string) option {
 	sname = strings.TrimSpace(sname)
 	lname = strings.TrimSpace(lname)
