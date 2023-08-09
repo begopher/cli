@@ -20,6 +20,17 @@ import (
 	"strings"
 )
 
+// Flags represent a collection of zero or more Flag.
+//
+// Client of cli library should not invoke any method of Flags directly,
+// instead, flags should be passed to:
+//   - cli.Cmd(..., Flags, ...) function.
+//   - cli.Parent(..., Flags, ...) function.
+//   - cli.NestedApp(..., Flags, ...) function.
+//
+// # Panic when:
+//   - one of the given flag is nil value.
+//   - two flags has the same short or long name
 func Flags(flgs ...api.Flag) flags {
 	namespace := namespace()
 	var width int
@@ -41,13 +52,13 @@ func Flags(flgs ...api.Flag) flags {
 		}
 	}
 	return flags{
-		flgs: flgs,
+		flgs:  flgs,
 		width: width,
 	}
 }
 
 type flags struct {
-	flgs []api.Flag
+	flgs  []api.Flag
 	width int
 }
 

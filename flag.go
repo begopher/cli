@@ -19,6 +19,32 @@ import (
 	"strings"
 )
 
+// Flag represents a special kind of a command line option which hold a boolean value,
+// either true or false. Flag may has a short and/or a long name.
+// description is used when Usage is printed to the standard output so clients of
+// the your command line application know the meaning of any particular flag.
+//
+// Flag default value is false, and cannot be changed by you as a client of cli library.
+// User of your application may change the value to true by raising the flag either by
+// using the short name (-r) and/or the long name (--recursive). Raising flags using
+// short names has a short cut, instead of typing -r -a -f as individual flags separated
+// by space, it can be combined togethor in any arbitrary order e.g. -raf, -far, or -fra.
+//
+// The value of flag can be accessed by cli.Context.Flag("key"), where key can either be
+// Flag's short name or long name.
+//
+// Value can also be accessed by cli.Context.Flags() which returns map[string]bool
+// of all flags with associated values.
+//
+// Client of cli library should not invoke any method of Flag directly, instead, it should
+// be passed to the cli.Flags(...Flag) function.
+//
+// # Panic when:
+//   - Both short and long name are empty string. (flag must have name).
+//   - Short name is two or more characters.
+//   - Long name is one character long.
+//   - Short or long name starts with hyphen e.g. "--recursive" instead of "recursive".
+//   - Description is empty. (Must tell your client the purpose of this flag).
 func Flag(sname string, lname, description string) flag {
 	sname = strings.TrimSpace(sname)
 	lname = strings.TrimSpace(lname)
