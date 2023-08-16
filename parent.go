@@ -20,7 +20,7 @@ import (
 	"strings"
 )
 
-func Parent(name, description string, statement Statement, options api.Options, flags api.Flags, manyCmds ...api.Cmd) api.Cmd {
+func Parent(name, description string, statement Statement, options api.Options, flags api.Flags, manyCmds ...api.Command) api.Command {
 	name = strings.TrimSpace(name)
 	description = strings.TrimSpace(description)
 	if name == "" {

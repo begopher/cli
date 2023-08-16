@@ -21,7 +21,7 @@ import (
 	"github.com/begopher/cli/internal/api"
 )
 
-func Group(name string, manyCmds ...api.Cmd) group {
+func Group(name string, manyCmds ...api.Command) group {
 	if name == "" {
 		panic("group.New: cannot be created from empty name")
 	}

@@ -14,7 +14,7 @@
 
 package api
 
-type Cmd interface {
+type Command interface {
 	Name() string
 	Description() string
 	Exec(path []string, options map[string]string, flags map[string]bool, args []string) (bool, error)

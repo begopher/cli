@@ -22,7 +22,7 @@ import (
 
 func SimpleApp(name, description string, statement Statement, options api.Options, flags api.Flags, args api.Arguments, vars api.Variadic, implementation Implementation) simpleApp {
 	name = removeAbsolutePath(name)
-	cmd := Cmd(
+	command := Command(
 		name,
 		description,
 		statement,
@@ -32,28 +32,28 @@ func SimpleApp(name, description string, statement Statement, options api.Option
 		vars,
 		implementation)
 	return simpleApp{
-		cmd: cmd,
+		command: command,
 	}
 }
 
 type simpleApp struct {
-	cmd api.Cmd
+	command api.Command
 }
 
 func (s simpleApp) Run(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf(s.cmd.Help())
+		return fmt.Errorf(s.command.Help())
 	}
 	args[0] = removeAbsolutePath(args[0])
 	options := make(map[string]string, 0)
 	flags := make(map[string]bool, 0)
 	path := make([]string, 0)
-	ok, err := s.cmd.Exec(path, options, flags, args)
+	ok, err := s.command.Exec(path, options, flags, args)
 	if err != nil {
 		return err
 	}
 	if !ok {
-		return fmt.Errorf(s.cmd.Help())
+		return fmt.Errorf(s.command.Help())
 	}
 	return nil
 }

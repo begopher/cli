@@ -20,7 +20,7 @@ import (
 	"strings"
 )
 
-func Cmd(name string, description string, statement Statement, opts api.Options, flgs api.Flags, arguments api.Arguments, variadic api.Variadic, implementation Implementation) cmd {
+func Command(name string, description string, statement Statement, opts api.Options, flgs api.Flags, arguments api.Arguments, variadic api.Variadic, implementation Implementation) command {
 	name = strings.TrimSpace(name)
 	description = strings.TrimSpace(description)
 	if name == "" {
@@ -59,20 +59,20 @@ func Cmd(name string, description string, statement Statement, opts api.Options,
 		msg := fmt.Sprintf("cli.Cmd: (%s) is identical to flag name or option name", name)
 		panic(msg)
 	}
-	return cmd{
+	return command{
 		name:           name,
 		description:    description,
 		statement:      statement,
 		opts:           opts,
 		flags:          flgs,
-		implementation: implementation,
 		arguments:      arguments,
 		variadic:       variadic,
+		implementation: implementation,
 		namespace:      namespace,
 	}
 }
 
-type cmd struct {
+type command struct {
 	name           string
 	description    string
 	statement      Statement
@@ -84,15 +84,15 @@ type cmd struct {
 	namespace      api.Namespace
 }
 
-func (c cmd) Name() string {
+func (c command) Name() string {
 	return c.name
 }
 
-func (c cmd) Description() string {
+func (c command) Description() string {
 	return c.description
 }
 
-func (c cmd) Exec(path []string, options map[string]string, flags map[string]bool, args []string) (bool, error) {
+func (c command) Exec(path []string, options map[string]string, flags map[string]bool, args []string) (bool, error) {
 	if len(args) == 0 {
 		return false, nil
 	}
@@ -166,7 +166,7 @@ func (c cmd) Exec(path []string, options map[string]string, flags map[string]boo
 	return true, nil
 }
 
-func (c cmd) extract(options map[string]string, flags map[string]bool, args []string) []string {
+func (c command) extract(options map[string]string, flags map[string]bool, args []string) []string {
 	length := len(args)
 	args = c.opts.Extract(options, args)
 	args = c.flags.Extract(flags, args)
@@ -176,11 +176,11 @@ func (c cmd) extract(options map[string]string, flags map[string]bool, args []st
 	return args
 }
 
-func (c cmd) String(width int) string {
+func (c command) String(width int) string {
 	return fmt.Sprintf("%-[1]*s  %s\n", width, c.name, c.description)
 }
 
-func (c cmd) usage(path string, summaries ...string) string {
+func (c command) usage(path string, summaries ...string) string {
 	var text, args strings.Builder
 	if c.arguments.Count() > 0 || c.variadic.Allowed() {
 		args.WriteString("[--] ")
@@ -218,10 +218,10 @@ func (c cmd) usage(path string, summaries ...string) string {
 	return text.String()
 }
 
-func (c cmd) Namespace() api.Namespace {
+func (c command) Namespace() api.Namespace {
 	return c.namespace
 }
 
-func (c cmd) Help() string {
+func (c command) Help() string {
 	return c.usage(c.name)
 }
