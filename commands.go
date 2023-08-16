@@ -20,7 +20,7 @@ import (
 	"strings"
 )
 
-func cmds(cmds []api.Command) _cmds {
+func commands(cmds []api.Command) _commands {
 	if len(cmds) < 1 {
 		panic("cli.Cmds: cannot be created from empty or nil slice")
 	}
@@ -40,20 +40,20 @@ func cmds(cmds []api.Command) _cmds {
 			nameWidth = width
 		}
 	}
-	return _cmds{
+	return _commands{
 		cmds:      cmds,
 		namespace: namespaces(xNamespaces),
 		nameWidth: nameWidth,
 	}
 }
 
-type _cmds struct {
+type _commands struct {
 	cmds      []api.Command
 	namespace api.Namespace
 	nameWidth int
 }
 
-func (c _cmds) Exec(path []string, options map[string]string, flags map[string]bool, args []string) (bool, error) {
+func (c _commands) Exec(path []string, options map[string]string, flags map[string]bool, args []string) (bool, error) {
 	for _, cmd := range c.cmds {
 		ok, err := cmd.Exec(path, options, flags, args)
 		if err != nil {
@@ -66,7 +66,7 @@ func (c _cmds) Exec(path []string, options map[string]string, flags map[string]b
 	return false, nil
 }
 
-func (c _cmds) Names() []string {
+func (c _commands) Names() []string {
 	names := make([]string, len(c.cmds))
 	for i, cmd := range c.cmds {
 		names[i] = cmd.Name()
@@ -74,7 +74,7 @@ func (c _cmds) Names() []string {
 	return names
 }
 
-func (c _cmds) String() string {
+func (c _commands) String() string {
 	var text strings.Builder
 	for _, cmd := range c.cmds {
 		text.WriteString("  ")
@@ -83,6 +83,6 @@ func (c _cmds) String() string {
 	return text.String()
 }
 
-func (c _cmds) Namespace() api.Namespace {
+func (c _commands) Namespace() api.Namespace {
 	return c.namespace
 }

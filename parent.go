@@ -44,8 +44,8 @@ func Parent(name, description string, statement Statement, options api.Options, 
 	if flags == nil {
 		panic("cli.Parent: flags cannot be nil")
 	}
-	_cmds := cmds(manyCmds)
-	namespaces := _cmds.Namespace()
+	cmds := commands(manyCmds)
+	namespaces := cmds.Namespace()
 	if err := namespaces.Add(name); err != nil {
 		msg := fmt.Sprintf("cli.Parent: name(%s) is duplicated, with a cmd child or one of its flag/option", name)
 		panic(msg)
@@ -64,7 +64,7 @@ func Parent(name, description string, statement Statement, options api.Options, 
 		statement:   statement,
 		options:     options,
 		flags:       flags,
-		cmds:        _cmds,
+		commands:    cmds,
 		namespace:   namespaces,
 	}
 }
@@ -75,7 +75,7 @@ type parent struct {
 	statement   Statement
 	options     api.Options
 	flags       api.Flags
-	cmds        api.Cmds
+	commands    api.Commands
 	namespace   api.Namespace
 }
 
@@ -126,7 +126,7 @@ func (p parent) Exec(path []string, options map[string]string, flags map[string]
 		msg := fmt.Sprintf("Error: unknown command (%s)", args[0])
 		return false, fmt.Errorf(p.usage(fullPath, msg))
 	}
-	ok, err := p.cmds.Exec(path, options, flags, args)
+	ok, err := p.commands.Exec(path, options, flags, args)
 	if err != nil {
 		return ok, err
 	}
@@ -160,7 +160,7 @@ func (p parent) usage(path string, errors ...string) string {
 	text.WriteString(fmt.Sprintf("Usage: %s %sCOMMAND\n\n", path, optFlg))
 	text.WriteString(fmt.Sprintf("%s\n\n", p.description))
 	text.WriteString("Commands:\n")
-	text.WriteString(p.cmds.String())
+	text.WriteString(p.commands.String())
 	text.WriteString(p.options.String())
 	text.WriteString(p.flags.String())
 	if len(errors) > 0 {

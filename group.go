@@ -21,26 +21,26 @@ import (
 	"github.com/begopher/cli/internal/api"
 )
 
-func Group(name string, manyCmds ...api.Command) group {
+func Group(name string, cmds ...api.Command) group {
 	if name == "" {
 		panic("group.New: cannot be created from empty name")
 	}
-	if len(manyCmds) < 1 {
+	if len(cmds) < 1 {
 		panic("group.New: cmds cannot be empty or nil")
 	}
 	return group{
 		name: name,
-		cmds: cmds(manyCmds),
+		commands: commands(cmds),
 	}
 }
 
 type group struct {
 	name string
-	cmds api.Cmds
+	commands api.Commands
 }
 
 func (g group) Exec(path []string, options map[string]string, flags map[string]bool, args []string) (bool, error) {
-	ok, err := g.cmds.Exec(path, options, flags, args)
+	ok, err := g.commands.Exec(path, options, flags, args)
 	if err != nil {
 		return ok, err
 	}
@@ -55,16 +55,16 @@ func (g group) Name() string {
 }
 
 func (g group) Names() []string {
-	return g.cmds.Names()
+	return g.commands.Names()
 }
 
 func (g group) Namespace() api.Namespace {
-	return g.cmds.Namespace()
+	return g.commands.Namespace()
 }
 
 func (g group) String() string {
 	var text strings.Builder
 	text.WriteString(fmt.Sprintf("%s:\n", g.name))
-	text.WriteString(g.cmds.String())
+	text.WriteString(g.commands.String())
 	return text.String()
 }

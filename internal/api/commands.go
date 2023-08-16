@@ -14,7 +14,7 @@
 
 package api
 
-type Cmds interface {
+type Commands interface {
 	Exec(path []string, options map[string]string, flags map[string]bool, args []string) (bool, error)
 	Namespace() Namespace
 	Names() []string
