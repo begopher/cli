@@ -21,13 +21,16 @@ import (
 )
 
 func groups(grps []api.Group) _groups {
-	if len(grps) < 1 {
-		panic("cli.Groups: grps cannot be nil or empty slice")
+	if len(grps) == 0 {
+		panic("cli.Groups: grps cannot be empty slice")
 	}
 	xnamespaces := make([]api.Namespace, len(grps))
 	groupNamespace := namespace()
 	cmdNamespace := namespace()
 	for i, group := range grps {
+		if group == nil {
+			panic("cli.Groups: nil value is not allowed as a valid Group")
+		}
 		xnamespaces[i] = group.Namespace()
 		if err := groupNamespace.Add(group.Name()); err != nil {
 			msg := fmt.Sprintf("cli.Groups: name (%s) is taken by two group", group.Name())
