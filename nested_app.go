@@ -40,7 +40,12 @@ func NestedApp(name, description string, statement Statement, options api.Option
 		panic("cli.NestedApp: flags cannot be nil")
 	}
 	if len(varGroups) == 0 {
-		panic("cli.NestedApp: cannot be created from nil/empty varGroups")
+		panic("cli.NestedApp: cannot be created from empty varGroups")
+	}
+	for _, group := range varGroups {
+		if group == nil {
+			panic("cli.NestedApp: nil value is not allowed in varGroups")
+		}
 	}
 	groups := groups(varGroups)
 	namespace := groups.Namespace()

@@ -30,7 +30,7 @@ func Group(name string, cmds ...api.Command) group {
 	}
 	for _, cmd := range cmds {
 		if cmd == nil {
-			panic("cli.Group: nil value is not allowed as a Command")
+			panic("cli.Group: nil value is not allowed in cmds")
 		}
 	}
 	return group{

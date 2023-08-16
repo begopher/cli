@@ -29,7 +29,7 @@ func groups(grps []api.Group) _groups {
 	cmdNamespace := namespace()
 	for i, group := range grps {
 		if group == nil {
-			panic("cli.Groups: nil value is not allowed as a valid Group")
+			panic("cli.Groups: nil value is not allowed in grps")
 		}
 		xnamespaces[i] = group.Namespace()
 		if err := groupNamespace.Add(group.Name()); err != nil {
