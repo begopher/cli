@@ -21,18 +21,18 @@ import (
 )
 
 func commands(cmds []api.Command) _commands {
-	if len(cmds) < 1 {
-		panic("cli.Cmds: cannot be created from empty or nil slice")
+	if len(cmds) == 0 {
+		panic("cli.Commands: cannot be created from empty cmds")
 	}
 	xNamespaces := make([]api.Namespace, len(cmds))
 	sibling := namespace()
 	var nameWidth int
 	for i, cmd := range cmds {
 		if cmd == nil {
-			panic("cli.Cmds: nil is not accepted as a valid cmd value")
+			panic("cli.Commands: nil value is not allowed in cmds")
 		}
 		if err := sibling.Add(cmd.Name()); err != nil {
-			msg := fmt.Sprintf("cli.Cmds: name (%s) is taken by other Cmd", cmd.Name())
+			msg := fmt.Sprintf("cli.Commands: name (%s) is taken by other Command", cmd.Name())
 			panic(msg)
 		}
 		xNamespaces[i] = cmd.Namespace()

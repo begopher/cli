@@ -24,39 +24,39 @@ func Command(name string, description string, statement Statement, opts api.Opti
 	name = strings.TrimSpace(name)
 	description = strings.TrimSpace(description)
 	if name == "" {
-		panic("cli.Cmd: name cannot be empty")
+		panic("cli.Command: name cannot be empty")
 	}
 	if strings.HasPrefix(name, "-") {
-		panic("cli.Parent: name cannot start with -")
+		panic("cli.Command: name cannot start with -")
 	}
 	if description == "" {
-		panic("cli.Cmd: description cannot be empty")
+		panic("cli.Command: description cannot be empty")
 	}
 	if statement == nil {
-		panic("cli.Cmd: statement cannot be nil")
+		panic("cli.Command: statement cannot be nil")
 	}
 	if opts == nil {
-		panic("cli.Cmd: opts cannot be nil")
+		panic("cli.Command: opts cannot be nil")
 	}
 	if flgs == nil {
-		panic("cli.Cmd: flgs cannot be nil")
+		panic("cli.Command: flgs cannot be nil")
 	}
 	if arguments == nil {
-		panic("cli.Cmd: arguments cannot be nil")
+		panic("cli.Command: arguments cannot be nil")
 	}
 	if variadic == nil {
-		panic("cli.Cmd: variadic cannot be nil")
+		panic("cli.Command: variadic cannot be nil")
 	}
 	if implementation == nil {
-		panic("cli.Cmd: implementation cannot be nil")
+		panic("cli.Command: implementation cannot be nil")
 	}
 	namespace := namespace()
 	namespace.AddAll(opts.Names())
 	if err := namespace.AddAll(flgs.Names()); err != nil {
-		panic("cli.Cmd: options and flags have identical names")
+		panic("cli.Command: options and flags have identical names")
 	}
 	if err := namespace.Add(name); err != nil {
-		msg := fmt.Sprintf("cli.Cmd: (%s) is identical to flag name or option name", name)
+		msg := fmt.Sprintf("cli.Command: name (%s) is identical to a flag name or an option name", name)
 		panic(msg)
 	}
 	return command{
