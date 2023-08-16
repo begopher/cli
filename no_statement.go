@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 package cli
-
+/*
 func NoStatement() noStatement {
 	return noStatement{}
 }
@@ -27,3 +27,4 @@ func (n noStatement) String(string) string {
 func (noStatement) Empty() bool {
 	return true
 }
+*/

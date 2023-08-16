@@ -33,7 +33,8 @@ func Cmd(name string, description string, statement Statement, opts api.Options,
 		panic("cli.Cmd: description cannot be empty")
 	}
 	if statement == nil {
-		statement = NoStatement()
+		//statement = NoStatement()
+		panic("cli.Cmd: statement cannot be nil")
 	}
 	if opts == nil {
 		opts = Options()

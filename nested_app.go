@@ -25,13 +25,14 @@ func NestedApp(name, description string, statement Statement, options api.Option
 	name = strings.TrimSpace(name)
 	description = strings.TrimSpace(description)
 	if name == "" {
-		panic("cli.Application: cannot be created from empty name")
+		panic("cli.NestedApp: cannot be created from empty name")
 	}
 	if description == "" {
-		panic("cli.Application: cannot be created from empty description")
+		panic("cli.NestedApp: cannot be created from empty description")
 	}
 	if statement == nil {
-		statement = NoStatement()
+		//statement = NoStatement()
+		panic("cli.NestedApp: statement cannot be nil")
 	}
 	if options == nil {
 		options = Options()
@@ -40,20 +41,20 @@ func NestedApp(name, description string, statement Statement, options api.Option
 		flags = Flags()
 	}
 	if len(varGroups) == 0 {
-		panic("cli.Application: cannot be created from nil/empty varGroups")
+		panic("cli.NestedApp: cannot be created from nil/empty varGroups")
 	}
 	groups := groups(varGroups)
 	namespace := groups.Namespace()
 	if err := namespace.Add(name); err != nil {
-		msg := fmt.Sprintf("cli.Application: application name (%s) is used by cmd, option or flag", name)
+		msg := fmt.Sprintf("cli.NestedApp: application name (%s) is used by cmd, option or flag", name)
 		panic(msg)
 	}
 	if err := namespace.AddAll(options.Names()); err != nil {
-		msg := fmt.Sprintf("cli.Application: option name (%s) is used by cmd, option or flag", err)
+		msg := fmt.Sprintf("cli.NestedApp: option name (%s) is used by cmd, option or flag", err)
 		panic(msg)
 	}
 	if err := namespace.AddAll(flags.Names()); err != nil {
-		msg := fmt.Sprintf("cli.Application: flag name (%s) is used by cmd, option or flag ", err)
+		msg := fmt.Sprintf("cli.NestedApp: flag name (%s) is used by cmd, option or flag ", err)
 		panic(msg)
 	}
 	if err := namespace.Add("help"); err != nil {

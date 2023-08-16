@@ -19,9 +19,9 @@ import (
 )
 
 func Statements(statements ...Statement) _statements {
-	if len(statements) == 0 {
-		panic("cli.Statements: statements cannot be empty")
-	}
+	//if len(statements) == 0 {
+	//	panic("cli.Statements: statements cannot be empty")
+	//}
 	for _, stat := range statements {
 		if stat == nil {
 			panic("cli.Statements: nil value is not accepted")
@@ -35,6 +35,9 @@ type _statements struct {
 }
 
 func (s _statements) String(path string) string {
+	if len(s.statements) == 0 {
+		return ""
+	}
 	var text strings.Builder
 	for _, statement := range s.statements {
 		text.WriteString(statement.String(path))

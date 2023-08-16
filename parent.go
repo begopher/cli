@@ -24,19 +24,20 @@ func Parent(name, description string, statement Statement, options api.Options, 
 	name = strings.TrimSpace(name)
 	description = strings.TrimSpace(description)
 	if name == "" {
-		panic("cmd.Parent: cannot be created from empty name")
+		panic("cli.Parent: cannot be created from empty name")
 	}
 	if description == "" {
-		panic("cmd.Parent: cannot be created from empty description")
+		panic("cli.Parent: cannot be created from empty description")
 	}
 	if strings.HasPrefix(name, "-") {
 		panic("cli.Parent: name cannot start with -")
 	}
 	if len(manyCmds) < 1 {
-		panic("cmd.Parent: cannot be created from empty/nil cmds")
+		panic("cli.Parent: cannot be created from empty/nil cmds")
 	}
 	if statement == nil {
-		statement = NoStatement()
+		//statement = NoStatement()
+		panic("cli.Parent: statement cannot be nil")
 	}
 	if options == nil {
 		options = Options()
