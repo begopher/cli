@@ -20,7 +20,7 @@ import (
 	"strings"
 )
 
-func Cmd(name string, description string, statement Statement, opts api.Options, flgs api.Flags, arguments api.Arguments, variadic api.Variadic, command Command) cmd {
+func Cmd(name string, description string, statement Statement, opts api.Options, flgs api.Flags, arguments api.Arguments, variadic api.Variadic, implementation Implementation) cmd {
 	name = strings.TrimSpace(name)
 	description = strings.TrimSpace(description)
 	if name == "" {
@@ -47,8 +47,8 @@ func Cmd(name string, description string, statement Statement, opts api.Options,
 	if variadic == nil {
 		panic("cli.Cmd: variadic cannot be nil")
 	}
-	if command == nil {
-		panic("cli.Cmd: command (user implementation) cannot be empty")
+	if implementation == nil {
+		panic("cli.Cmd: implementation cannot be nil")
 	}
 	namespace := namespace()
 	namespace.AddAll(opts.Names())
@@ -60,28 +60,28 @@ func Cmd(name string, description string, statement Statement, opts api.Options,
 		panic(msg)
 	}
 	return cmd{
-		name:        name,
-		description: description,
-		statement:   statement,
-		opts:        opts,
-		flags:       flgs,
-		command:     command,
-		arguments:   arguments,
-		variadic:    variadic,
-		namespace:   namespace,
+		name:           name,
+		description:    description,
+		statement:      statement,
+		opts:           opts,
+		flags:          flgs,
+		implementation: implementation,
+		arguments:      arguments,
+		variadic:       variadic,
+		namespace:      namespace,
 	}
 }
 
 type cmd struct {
-	name        string
-	description string
-	statement   Statement
-	opts        api.Options
-	flags       api.Flags
-	command     Command
-	arguments   api.Arguments
-	variadic    api.Variadic
-	namespace   api.Namespace
+	name           string
+	description    string
+	statement      Statement
+	opts           api.Options
+	flags          api.Flags
+	implementation Implementation
+	arguments      api.Arguments
+	variadic       api.Variadic
+	namespace      api.Namespace
 }
 
 func (c cmd) Name() string {
@@ -160,7 +160,7 @@ func (c cmd) Exec(path []string, options map[string]string, flags map[string]boo
 		return fmt.Errorf(c.usage(fullPath, summaries...))
 	}
 	ctx := context(path, options, flags, namedArgs, variadicArgs, usage)
-	if err := c.command.Exec(ctx); err != nil {
+	if err := c.implementation.Exec(ctx); err != nil {
 		return false, err
 	}
 	return true, nil

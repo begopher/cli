@@ -14,6 +14,6 @@
 
 package cli
 
-type Command interface {
+type Implementation interface {
 	Exec(ctx Context) error
 }
