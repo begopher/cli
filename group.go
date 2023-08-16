@@ -23,10 +23,15 @@ import (
 
 func Group(name string, cmds ...api.Command) group {
 	if name == "" {
-		panic("group.New: cannot be created from empty name")
+		panic("cli.Group: name cannot be empty")
 	}
-	if len(cmds) < 1 {
-		panic("group.New: cmds cannot be empty or nil")
+	if len(cmds) == 0 {
+		panic("cli.Group: cmds cannot be empty")
+	}
+	for _, cmd := range cmds {
+		if cmd == nil {
+			panic("cli.Group: nil value is not allowed as a Command")
+		}
 	}
 	return group{
 		name: name,
