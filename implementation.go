@@ -14,6 +14,13 @@
 
 package cli
 
+// Implementation represents a block of code which will be executed by a Command
+// within a given context.
+//
+// For further information see:
+//   - cli.Context
+//   - cli.Function
+//   - cli.Object
 type Implementation interface {
 	Exec(ctx Context) error
 }

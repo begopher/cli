@@ -34,13 +34,13 @@ func Group(name string, cmds ...api.Command) group {
 		}
 	}
 	return group{
-		name: name,
+		name:     name,
 		commands: commands(cmds),
 	}
 }
 
 type group struct {
-	name string
+	name     string
 	commands api.Commands
 }
 
