@@ -19,6 +19,17 @@ import (
 	"strings"
 )
 
+
+// NoVariadic prevents additional value to be passed after named arguments
+// (cli.Argument). invoking cli.Context.Variadic() method will returns
+// empty slice of string ([]string)
+//
+// If additional values is allowed use cli.Variadic instead.
+//
+// Client of cli library should not invoke any method of NoVariadic directly,
+// instead, NoVariadic should be passed to:
+//    - cli.Cmd(..., variadic, ...) function
+
 func NoVariadic() noVariadic {
 	return noVariadic{}
 }

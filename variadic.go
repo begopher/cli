@@ -19,6 +19,20 @@ import (
 	"strings"
 )
 
+// Variadic is an optional argument which allowed zero or more values to be passed
+// right after the required argument (cli.Argument). These values then, can be accessed
+// using cli.Context.Variadic() method
+//
+// By having non-empty description, Usage message will become more verbose and include
+// a new section called Variadic. The new section displays the name and the description
+// of variadic argument.
+//
+// See cli.NoVariadic() function if additional values is not allowed 
+//
+// Client of cli library should not invoke any method of Variadic directly,
+// instead, Variadic should be passed to:
+//    - cli.Cmd(..., variadic, ...) function
+//
 func Variadic(arg, description string) variadic {
 	arg = strings.TrimSpace(arg)
 	if arg == "" {
