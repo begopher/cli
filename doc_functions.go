@@ -34,6 +34,6 @@ func Default(value string) string {
 	return value
 }
 
-func Implementation(command Command) Command {
+func Object(command Command) Command {
 	return command
 }
