@@ -36,14 +36,13 @@ func Parent(name, description string, statement Statement, options api.Options, 
 		panic("cli.Parent: cannot be created from empty/nil cmds")
 	}
 	if statement == nil {
-		//statement = NoStatement()
 		panic("cli.Parent: statement cannot be nil")
 	}
 	if options == nil {
-		options = Options()
+		panic("cli.Parent: options cannot be nil")
 	}
 	if flags == nil {
-		flags = Flags()
+		panic("cli.Parent: flags cannot be nil")
 	}
 	_cmds := cmds(manyCmds)
 	namespaces := _cmds.Namespace()

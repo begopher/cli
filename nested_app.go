@@ -31,14 +31,13 @@ func NestedApp(name, description string, statement Statement, options api.Option
 		panic("cli.NestedApp: cannot be created from empty description")
 	}
 	if statement == nil {
-		//statement = NoStatement()
 		panic("cli.NestedApp: statement cannot be nil")
 	}
 	if options == nil {
-		options = Options()
+		panic("cli.NestedApp: options cannot be nil")
 	}
 	if flags == nil {
-		flags = Flags()
+		panic("cli.NestedApp: flags cannot be nil")
 	}
 	if len(varGroups) == 0 {
 		panic("cli.NestedApp: cannot be created from nil/empty varGroups")

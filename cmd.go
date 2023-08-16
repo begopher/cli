@@ -33,20 +33,19 @@ func Cmd(name string, description string, statement Statement, opts api.Options,
 		panic("cli.Cmd: description cannot be empty")
 	}
 	if statement == nil {
-		//statement = NoStatement()
 		panic("cli.Cmd: statement cannot be nil")
 	}
 	if opts == nil {
-		opts = Options()
+		panic("cli.Cmd: opts cannot be nil")
 	}
 	if flgs == nil {
-		flgs = Flags()
+		panic("cli.Cmd: flgs cannot be nil")
 	}
 	if arguments == nil {
-		arguments = Arguments()
+		panic("cli.Cmd: arguments cannot be nil")
 	}
 	if variadic == nil {
-		variadic = NoVariadic()
+		panic("cli.Cmd: variadic cannot be nil")
 	}
 	if command == nil {
 		panic("cli.Cmd: command (user implementation) cannot be empty")

@@ -19,7 +19,6 @@ import (
 	"strings"
 )
 
-
 // NoVariadic prevents additional value to be passed after named arguments
 // (cli.Argument). invoking cli.Context.Variadic() method will returns
 // empty slice of string ([]string)

@@ -27,12 +27,11 @@ import (
 // a new section called Variadic. The new section displays the name and the description
 // of variadic argument.
 //
-// See cli.NoVariadic() function if additional values is not allowed 
+// # Use cli.NoVariadic() function if additional values is not allowed
 //
 // Client of cli library should not invoke any method of Variadic directly,
 // instead, Variadic should be passed to:
-//    - cli.Cmd(..., variadic, ...) function
-//
+//   - cli.Cmd(..., variadic, ...) function
 func Variadic(arg, description string) variadic {
 	arg = strings.TrimSpace(arg)
 	if arg == "" {
