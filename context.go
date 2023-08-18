@@ -14,13 +14,37 @@
 
 package cli
 
+// Context gives client of cli library (developer) the ability to access all options,
+// flags, arguments and variadic arguments' values, which has been passed by end user
+// of the cli application.
+// Context also provides access to the entire path of the executed command, which consists of:
+//  - NestedApp name, followed by
+//  - All Parents names if exist, followed by.
+//  - Command name.
+// 
+// Option, Argument and Variadic methods return their values as strings. Therefore, parsing these values
+// in some cases to different data types like int or date might be necessity. In such cases,
+// if error occured due to invalid entry, "Context.Usage(...string) error" method can be used to
+// return the usage message of the executed command, with additional information given by the developer
+// to the end user, describing how the given entry can be fixed.
+// "Error: " prefix should be used to follow the library convention, which make it easier and faster
+// for the end user to determine where is the mistake.
+// 
+// # See cli.Error(context, error) function 
 type Context interface {
+	// Flag accepts either the short or the long name of any cli.Flag in the current executed command
+	// and returns true only if end user raised that flag either by the short name or by the long name.
 	Flag(string) bool
 	Flags() map[string]bool
+	// Option accepts either the short or the long name of any cli.Option in the current executed command
+	// and returns the assotiated value which has been given by end user. Otherwise the default will be returned.
 	Option(string) string
 	Options() map[string]string
+	// Argument accepts a name of any the cli.Argument in the current executed command and returns the correct value
+	// assosiated with that name, which has been given by the end user.
 	Argument(string) string
-	//Arguments() []string has not extra value for client
+	// Variadic returns slice of string of all additional values (that came after cli.Arguments) which has been given
+	// by the end user, if cli.NoVariadic is used instead of cli.Variadic then  empty slice will be returned.
 	Variadic() []string
 	Path() []string
 	Usage(...string) error
