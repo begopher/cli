@@ -18,7 +18,7 @@ import (
 	"strings"
 )
 
-func Statements(statements ...Statement) _statements {
+func Statements(statements ...Statement) Statement {
 	//if len(statements) == 0 {
 	//	panic("cli.Statements: statements cannot be empty")
 	//}

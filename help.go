@@ -18,16 +18,16 @@ import (
 	"fmt"
 )
 
-func HelpStatement() helpStatement {
-	return helpStatement{}
+func Help() Statement {
+	return help{}
 }
 
-type helpStatement struct{}
+type help struct{}
 
-func (helpStatement) String(path string) string {
+func (help) String(path string) string {
 	return fmt.Sprintf("Run '%s COMMAND --help' for more information on a command.\n", path)
 }
 
-func (helpStatement) Empty() bool {
+func (help) Empty() bool {
 	return false
 }

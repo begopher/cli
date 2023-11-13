@@ -18,18 +18,18 @@ import (
 	"strings"
 )
 
-func TextStatement(lines ...string) textStatement {
+func Text(lines ...string) Statement {
 	if len(lines) == 0 {
 		panic("cli.TextStatement: lines argument cannot be empty")
 	}
-	return textStatement{lines}
+	return text{lines}
 }
 
-type textStatement struct {
+type text struct {
 	lines []string
 }
 
-func (s textStatement) String(string) string {
+func (s text) String(string) string {
 	var text strings.Builder
 	for _, line := range s.lines {
 		text.WriteString(line)
@@ -38,6 +38,6 @@ func (s textStatement) String(string) string {
 	return text.String()
 }
 
-func (textStatement) Empty() bool {
+func (text) Empty() bool {
 	return false
 }

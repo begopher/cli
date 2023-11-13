@@ -14,7 +14,7 @@
 
 package cli
 
-func Function(fx func(Context) error) function {
+func Function(fx func(Context) error) Implementation {
 	if fx == nil {
 		panic("cli.Func: fx cannot be nil")
 	}

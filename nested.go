@@ -21,50 +21,50 @@ import (
 	"github.com/begopher/cli/internal/api"
 )
 
-func NestedApp(name, description string, statement Statement, options api.Options, flags api.Flags, varGroups ...api.Group) application {
+func Nested(name, description string, statement Statement, options api.Options, flags api.Flags, varGroups ...api.Group) Application {
 	name = strings.TrimSpace(name)
 	description = strings.TrimSpace(description)
 	if name == "" {
-		panic("cli.NestedApp: cannot be created from empty name")
+		panic("cli.Nested: cannot be created from empty name")
 	}
 	if description == "" {
-		panic("cli.NestedApp: cannot be created from empty description")
+		panic("cli.Nested: cannot be created from empty description")
 	}
 	if statement == nil {
-		panic("cli.NestedApp: statement cannot be nil")
+		panic("cli.Nested: statement cannot be nil")
 	}
 	if options == nil {
-		panic("cli.NestedApp: options cannot be nil")
+		panic("cli.Nested: options cannot be nil")
 	}
 	if flags == nil {
-		panic("cli.NestedApp: flags cannot be nil")
+		panic("cli.Nested: flags cannot be nil")
 	}
 	if len(varGroups) == 0 {
-		panic("cli.NestedApp: cannot be created from empty varGroups")
+		panic("cli.Nested: cannot be created from empty varGroups")
 	}
 	for _, group := range varGroups {
 		if group == nil {
-			panic("cli.NestedApp: nil value is not allowed in varGroups")
+			panic("cli.Nested: nil value is not allowed in varGroups")
 		}
 	}
 	groups := groups(varGroups)
 	namespace := groups.Namespace()
 	if err := namespace.Add(name); err != nil {
-		msg := fmt.Sprintf("cli.NestedApp: application name (%s) is used by cmd, option or flag", name)
+		msg := fmt.Sprintf("cli.Nested: application name (%s) is used by cmd, option or flag", name)
 		panic(msg)
 	}
 	if err := namespace.AddAll(options.Names()); err != nil {
-		msg := fmt.Sprintf("cli.NestedApp: option name (%s) is used by cmd, option or flag", err)
+		msg := fmt.Sprintf("cli.Nested: option name (%s) is used by cmd, option or flag", err)
 		panic(msg)
 	}
 	if err := namespace.AddAll(flags.Names()); err != nil {
-		msg := fmt.Sprintf("cli.NestedApp: flag name (%s) is used by cmd, option or flag ", err)
+		msg := fmt.Sprintf("cli.Nested: flag name (%s) is used by cmd, option or flag ", err)
 		panic(msg)
 	}
 	if err := namespace.Add("help"); err != nil {
-		panic("cli.NestedApp: help cannot be used as a name of any object (reserved for --help)")
+		panic("cli.Nested: help cannot be used as a name of any object (reserved for --help)")
 	}
-	return application{
+	return nested{
 		//name:        name,
 		name:        removeAbsolutePath(name),
 		description: description,
@@ -75,7 +75,7 @@ func NestedApp(name, description string, statement Statement, options api.Option
 	}
 }
 
-type application struct {
+type nested struct {
 	name        string
 	description string
 	statement   Statement
@@ -84,7 +84,7 @@ type application struct {
 	groups      api.Groups
 }
 
-func (a application) Run(args []string) error {
+func (a nested) Run(args []string) error {
 	if len(args) == 0 {
 		return fmt.Errorf(a.usage())
 	}
@@ -139,7 +139,7 @@ func (a application) Run(args []string) error {
 	return fmt.Errorf(a.usage(msg))
 }
 
-func (a application) extract(options map[string]string, flags map[string]bool, args []string) []string {
+func (a nested) extract(options map[string]string, flags map[string]bool, args []string) []string {
 	length := len(args)
 	args = a.options.Extract(options, args)
 	args = a.flags.Extract(flags, args)
@@ -149,7 +149,7 @@ func (a application) extract(options map[string]string, flags map[string]bool, a
 	return args
 }
 
-func (a application) usage(errors ...string) string {
+func (a nested) usage(errors ...string) string {
 	var optFlg string
 	if a.options.Count() > 0 && a.flags.Count() > 0 {
 		optFlg = "[OPTIONS|FLAGS] "
